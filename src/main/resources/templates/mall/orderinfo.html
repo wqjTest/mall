@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link rel="stylesheet" type="text/css" href="css/dialog.css" th:href="@{css/dialog.css}"/>
+		<link rel="stylesheet" type="text/css" href="css/all.css"/ th:href="@{/css/all.css}">
+		<script src="js/jquery-3.3.1.min.js" th:href="@{js/jquery-3.3.1.min.js}" type="text/javascript" charset="utf-8"></script>
+		<script src="/mall/js/clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+		#dialog_paysanjiao{
+			height: 0.75rem;
+			width: 0.83rem;
+			border-top: 0.03rem solid #e6e6e6;
+			border-right: 0.03rem solid #e6e6e6;
+			position: absolute;
+			right: 1.78rem;
+			top: 23.2rem;
+			background: #FFFFFF;
+			transform: rotate(-45deg);
+		}
+		</style>
+		<title></title>
+		<script type="text/javascript">
+    	//显示放弃付款提示框
+    	function notorok_back(){
+    		$(".dialog").css("display","flex");
+            $('body,html').addClass('notScroll');
+    	}
+    	//放弃付款
+    	function yes_back(){
+    		$(".dialog").css("display","none");
+            $('body,html').removeClass('notScroll');
+            window.history.go(-1);
+    	}
+    </script>
+	</head>
+	<body>
+		<div id="main">
+			<div class="main_head title_center main_head_positive">
+			<button type="button" class="back_button title_left left" onclick="javaScript:history.back(-1)"></button>
+		            订单详情
+		    <span class="title_rigth right"></span>
+			</div>
+			<div id="content" class="main_content">
+				<div th:switch="${order.payStatus}" >
+					<div th:case="'0'">
+						<div class="content_img"
+							th:style="'background:url(' + @{/img/my/bg_payinfo.png} + ');'">
+							<p class="wait_title">等待买家付款</p>'
+							<p class="wait_time">剩余<label>21小时52分钟</label>自动关闭</p>					
+						</div>
+					</div>
+					<div th:case="'1'">
+						<div class="content_img"
+							th:style="'background-image:url(' + @{/img/my/bg_payed.png} + ');'">
+						</div>
+						<div class="where" onclick="lookdeliver()">
+							<span class="where-deliver" style="display: block; float: left;">
+								您的订单开始处理
+							<br />
+								<span class="wher-date">
+									2018-12-02 16:40:59
+								</span>
+							</span>
+						</div>
+					</div>
+					<div th:case="'2'">
+						<div class="content_img"
+							th:style="'background-image:url(' + @{/img/my/bg_delivered.png} + ');'">
+						</div>
+						<div class="where" onclick="lookdeliver()">
+							<span class="where-deliver" style="display: block; float: left;">
+								<!--<div style="clear: both;"></div>-->
+								物流已经在哪里
+							<br />
+		                    <script type="text/javascript">
+		                    	function  lookdeliver(){
+		                    		window.location.href="orderinfo-deliverInfo.html"
+		                    	}
+		                    </script>
+							<span class="wher-date">
+								2018-12-02 16:40:59
+							</span>
+						</div>
+					</div>
+					<div th:case="'3'">
+						<div class="content_img"
+							th:style="'background-image:url(' + @{/img/my/bg_order_success.png} + ');'">
+						</div>
+					</div>
+				</div>
+				<div class="reveiving-add-have">
+				    <div class="addresser">
+				        <p>收件人:</p><span id="add-name" th:text="${order.personName}">张三</span>
+				        <span id="phone-number" th:text="${order.phoneNum}">139******00</span>
+				        <span id="detalied-add" th:text="${order.addrDesc}">江苏省苏州市吴中区</span>
+				    </div>
+				</div>
+				<div class="waitingfor_main">
+					<ul th:each="entity:${details}">
+				 		<li>
+				 			<img src="img/skirt1.png"/ th:src="${entity.goodsImg}">
+				 			<div id="img_name" class="waiiting_goodsname" th:text="${entity.goodsName}">港味chic优雅气质露肩长袖修身T恤+系带高腰开叉长款半身裙2018秋
+				 			</div>
+				 			<div id="img_price" class="goods_priceandqty">
+				 				<label class="table_price" th:text="${entity.price}">299</label>
+				 				<br />
+				 				<label th:text="x+${entity.num}">x1</label>
+				 			</div>
+				 			<!-- 	
+				 			<div class="size">
+				 				尺码：<label>M</label>;
+				 				颜色分类：<label>黑色+灰色</label>
+				 			</div>
+				 			 -->
+				 	    </li>
+			 	    </ul>
+		 	   </div>
+		 	   <table border="0" class="table_text">
+		 	   	<tr>
+		 	   		<td class="table_name">商品总价</td>
+		 	   		<td class="table_price ta_style" th:text="${order.orderAmount}">178.00</td>
+		 	   	</tr>
+		 	   	<tr>
+		 	   		<td class="table_name" >运费（快递）</td>
+		 	   		<td class="table_price ta_style">0.00</td>
+		 	   	</tr>
+		 	   	<tr>
+		 	   		<td class="table_name tab_count">订单总价</td>
+		 	   		<td class="table_price ta_style tab_count" th:text="${order.orderAmount}">178.00</td>
+		 	   	</tr>
+		 	   </table>
+		 	<div th:if="${order.payStatus} == '0'">
+			 	<div class="dialog_pay" >
+	                 <div id="dialog_paysanjiao"></div>
+	                 <p class="payfor_goodstitle">需付款</p>
+	                 <p class="payfor_goodsprice" style="color: #F4BA33;" th:text="${order.orderAmount}">178.00</p>
+				</div>
+			</div>
+			<div class="order_info">
+				<table border="0" class="order_table  table_text">
+					<tr>
+						<td class="order_tabletdname">订单编号：</td>
+						<td th:text="${order.orderCode}">123123123</td>
+						<td><button id="btn" type="button" class="copy_tablebtn" th:attr="data-clipboard-text=${order.orderCode}">复制</button></td>
+					</tr>
+					<!-- 
+					<tr>
+						<td class="order_tabletdname">交易账号：</td>
+						<td colspan="2">201809142222200000000</td>
+					</tr>
+					 -->
+					<tr>
+						<td class="order_tabletdname">创建时间：</td>
+						<td colspan="2" th:text="${#temporals.format(order.createDate,'yyyy-MM-dd hh:mm:ss')}"></td>
+					</tr>
+				</table>
+			</div>
+			<div id="contact_service">
+				<input type="button" name="" id="" value="联系客服" onclick="window.open('customerService.html','_self')"/>
+			</div>
+			<!-- 
+			<div id="" style="width: 100%;height: auto; background-color: #e6e6e6;">
+				<div id="title">
+                       <div id="title_like">
+                       	 	<p class="p left"></p>
+                        <div class="cricle left"></div>                        
+                    	<span id=""style="width: 6.19rem;">
+                    		你可能还喜欢 
+                    	</span>  
+                    	<p class="p right"></p>
+                        <div class="cricle right">                        	                        
+                       </div>                   
+               </div>
+			</div>
+			</div>
+			-->
+			<div class="space"></div>
+			<div th:if="${order.payStatus} == '0'">
+				<div style="position: fixed;bottom: 0;z-index: 10;background-color: #ffffff;" class="waiting_footer">
+			 	    	<div class="payagain">
+			 	    		<input type="button" name="againbtn" id="againbtn" value="更多" class="waiting_button waiting_button1" />
+			 	    	</div>
+			 	    	<div id="" style="width: 8.88rem; float: right;">
+			 	    	<input type="button" name="" id="" value="取消订单" class=" borderradius waiting_button waiting_button2" />
+			 	    	<input type="button" name="" id="" value="付款" class="borderradius waiting_button waiting_button3" 
+			 	    	onclick="window.open('cost.html','_self')" />
+			 	    	</div>		 	        
+			 	 </div>
+		 	 </div>
+		 	 <div th:if="${order.payStatus} == '1' OR ${order.payStatus} == '2'">
+			 	 <div style="position: fixed;bottom: 0;z-index: 10;background-color: #ffffff;" class="waiting_footer">
+			 	    	<div class="payagain" style="margin-left: calc(100% - 9rem);">
+			 	    		<input type="button" name="againbtn" id="againbtn" value="更多" class="waiting_button waiting_button1" />
+			 	    	</div>
+			 	    	<div id="" style="width: 5rem; float: right;">
+			 	    	<input type="button" name="" id="" value="确认收货" onclick="showdialog()" class="borderradius waiting_button waiting_button3" />
+			 	    	</div>		 	        
+			 	  </div>
+		 	  </div>
+		 	  <div th:if="${order.payStatus} == '3'">
+			 	  <div style="position: fixed;bottom: 0;z-index: 10;background-color: #ffffff;" class="waiting_footer">
+			 	    	<div class="payagain">
+			 	    		<input type="button" name="againbtn" id="againbtn" value="更多" class="waiting_button waiting_button1" />
+			 	    	</div>
+			 	    	<div id="" style="width: 8.88rem; float: right;">
+			 	    	<input type="button" name="" id="" value="查看物流" class=" borderradius waiting_button waiting_button2" onclick="return false;" />
+			 	    	<input type="button" name="" id="" value="评价" class="borderradius waiting_button waiting_button3" onclick="return false;"/>
+			 	    	</div>		 	        
+			 	    </div>
+		 	  </div>
+		   </div>
+		   <!--
+				作者：offline
+				时间：2018-12-06
+				描述：放弃付款弹出框
+			-->
+			<div class="dialog">
+				<div class="dialog_title">
+					<p class="dia_title">确认放弃付款吗？</p>
+					<div class="dia_text">
+						未支付订单将在不久后自动关闭，
+						请尽快支付
+					</div>
+					<div class="dia_footer">
+						<input class="dia_footer_button dia_footer_buttonno" type="button" value="暂时放弃" onclick="yes_back()" />
+						<input class="dia_footer_button dia_footer_buttonok" type="button"  value="继续支付" onclick="no_back()"/>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+			function no_back(){
+				$(".dialog").css("display","none");
+		        $('body,html').removeClass('notScroll');
+			}
+		</script>
+	</body>
+</html>

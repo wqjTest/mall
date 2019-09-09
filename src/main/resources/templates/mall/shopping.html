@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<script th:src="@{/js/jquery-3.3.1.min.js}" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/all.css}"/>
+	<script th:src="@{/js/addNumBtn.js}"></script>
+	<title></title>
+	<script type="text/javascript">
+		// 判断是否显示弹出框
+		function ruleOpen(){
+			$("#dialog").show();
+            $('body,html').addClass('notScroll');
+		}
+		$(document).ready(function(){
+            isnot();
+        });
+		//判断页面有无商品
+		function isnot(){
+		    var html = "<div class=\"main_content\"><div id=\"blank_content\">" +
+                "<img th:src=\"@{/img/shCar/blank.png}\"/><p>购物车空空</p>" +
+                "<input type=\"button\" class=\"again\" value=\" 去逛逛\" />" +
+                "</div></div>";
+		    var tableObj = document.getElementById('table').rows[0];
+            if(tableObj === null){
+                $(".main_content").html("");
+                $(".main_content").html(html);
+			}
+        }
+	</script>
+</head>
+<body>
+<div class="html_main">
+	<div class="main_head main_head_positive">
+		购物车
+	</div>
+	<div class="main_content" >
+		<table id="table" class="table_text" border="0">
+			<tr class="tr" th:name="table_car" th:each="carItem,carStatus:${carList}" th:data="${carItem.id}">
+				<!-- 选择按钮 -->
+				<td class="select">
+					<img th:data="${carItem.id}" id="selter" name="selter" th:src="@{/img/no.png}"
+						 style="width: 0.88rem;height: 0.88rem">
+				</td>
+				<!-- 商品图片 -->
+				<td class="tdimg td">
+					<img th:src="${carItem.commodityImage}">
+				</td>
+				<td>
+					<div id="deacribe">
+						<div id="title_top">
+							<div id="name" class="left" style="width: calc(100% - 3rem);" th:text="${carItem.commodityName}">
+							</div>
+							<div class="right">
+								<input type="button"/>
+							</div>
+						</div>
+						<div id="title_bottom">
+							<div id="price" class="price left" >
+								<span id="price_span" th:text="'￥' + ${carItem.price}"></span>
+							</div>
+							<div id="qty" class="right">
+								<div id="count" >
+									<!-- 数量增加 -->
+									<label th:data="${carItem.id}" id="remove" class="label_pro label_left" onclick=removeClick(this)>-</label>
+									<!-- 数量大小 -->
+									<input th:id="${carItem.id}" readonly="readonly" class="input_count" type="text" th:value="${carItem.number}"/>
+									<!-- 数量减少 -->
+									<label th:data="${carItem.id}" id="add" class="label_right label_pro" onclick=addClick(this)>+</label>
+								</div>
+							</div>
+						</div>
+					</div>
+				</td>
+			</tr>
+		</table>
+		<div style="height: 5rem"></div>
+	</div>
+</div>
+
+<div id="shopping_footer">
+	<table border="0" class="table_text">
+		<tr>
+			<td th:id="allChose" style="text-align: left; padding: 0; font-size: 0.94rem;border: 0;">
+				<img th:src="@{/img/no.png}" style="width: 0.9rem;height: 0.9rem; vertical-align: middle;">
+				全选
+			</td>
+			<td style="text-align:right;padding:0;font-size:0.81rem;border:0;">
+				合计：<span style="color: #FF1818;font-size: 0.94rem;">￥</span>
+				<label id="countprict" style="color: #FF1818;font-size: 0.94rem;"> 0 </label>
+				<input id="btn" type="button" class="input_btn" value="结算（0）" onclick="payFor()">
+			</td>
+		</tr>
+	</table>
+</div>
+
+<footer>
+	<div class="bottom-space" style="position: fixed;bottom: 0"></div>
+	<div class="bottom-bar">
+		<a href="javascript:indexJump(0)" class="home " hidefocus="true"><p>首页</p></a>
+		<a href="javascript:indexJump(1)" class="classify" hidefocus="true"><p>分类</p></a>
+		<!--<a href="integral.html" class="gold" hidefocus="true"><p>积分专区</p></a>-->
+		<a href="javascript:indexJump(3)" class="shopping this-page this-shopping" hidefocus="true"><p>购物车</p></a>
+		<a href="javascript:indexJump(4)" class="my" hidefocus="true"><p>我的</p></a>
+	</div>
+</footer>
+</div>
+
+<!-- 购物车满-弹出框 -->
+<!--<div id="dialog" class="window_mask">
+	<div id="dialog_main" class="window_boundingBox">
+		<div id="dialog_head">
+			<p class="text1">购物车快满了</p>
+			<p>现有66件宝贝，建议清理较早宝贝</p>
+			<div id="change">
+				<div class="left" style="margin-left: 1rem;">
+					7天前
+				</div>
+				<div class="right" style="margin-right: 1rem;">
+					<button type="button" class="btn">全选</button>
+				</div>
+			</div>
+		</div>
+		<div id="dialog_content" class="window_boundingBox window_body">
+			<div id="dialog_info">
+				<div id="info1" class="left divwidth" style="margin-left: 0.5rem;">
+					<img src="img/shCar/other.png"/>
+				</div>
+				<div id="info1" class="left divwidth" style="margin-left: 0.5rem">
+					<img src="img/shCar/other_1.png"/>
+				</div>
+				<div id="info1" class="right divwidth" style="margin-right: 0.5rem;">
+					<img src="img/shCar/other_1.png"/>
+				</div>
+			</div>
+			<div id="dialog_info">
+				<div id="info1" class="left divwidth" style="margin-left: 0.5rem;">
+					<img src="img/shCar/other_1.png"/>
+				</div>
+				<div id="info1" class="left divwidth" style="margin-left: 0.5rem">
+					<img src="img/shCar/other_1.png"/>
+				</div>
+				<div id="info1" class="right divwidth" style="margin-right: 0.5rem;">
+					<img src="img/shCar/other_1.png"/>
+				</div>
+			</div>
+			<div id="dialog_info">
+				<div id="info1" class="left divwidth" style="margin-left: 0.5rem;">
+					<img src="img/shCar/other_1.png"/>
+				</div>
+				<div id="info1" class="left divwidth" style="margin-left: 0.5rem">
+					<img src="img/shCar/other_1.png"/>
+				</div>
+				<div id="info1" class="right divwidth" style="margin-right: 0.5rem;">
+					<img src="img/shCar/other_1.png"/>
+				</div>
+			</div>
+			<div id="dialog_info">
+				<div id="info1" class="left divwidth" style="margin-left: 0.5rem;">
+					<img src="img/shCar/other_1.png"/>
+				</div>
+				<div id="info1" class="left divwidth" style="margin-left: .5rem">
+					<img src="img/shCar/other_1.png"/>
+				</div>
+				<div id="info1" class="right divwidth" style="margin-right: 0.5rem;">
+					<img src="img/shCar/other_1.png"/>
+				</div>
+			</div>
+			<div id="dialog_info">
+				<div id="info1" class="left divwidth" style="margin-left: 0.5rem;">
+					<img src="img/shCar/other_1.png"/>
+				</div>
+				<div id="info1" class="left divwidth" style="margin-left: 0.5rem">
+					<img src="img/shCar/other_1.png"/>
+				</div>
+				<div id="info1" class="right divwidth" style="margin-right: 0.5rem;">
+					<img src="img/shCar/other_1.png"/>
+				</div>
+			</div>
+		</div>
+		<div id="dialog_footer">
+			<div class="left" style="margin-left: 0.56rem; width: calc(50% - 0.56rem)">
+				<input type="button" class="dialogBtn" name="add" id="add" value="移入收藏夹" />
+			</div>
+			<div class="right" style="margin-right: 0.56rem; width: calc(50% - 0.56rem) ;text-align: right;">
+				<input type="button" class="dialogBtn" name="remove" id="remove" value="删除" />
+			</div>
+		</div>
+	</div>
+	<div id="cancel">
+		<img src="img/shCar/close.png"/>
+	</div>
+</div>-->
+<!-- 删除--弹出框 -->
+<div class="delDialo"></div>
+
+<script type="text/javascript">
+	var numFoot=$('.bottom-bar').find("a").length;
+	if( numFoot==1){$('.bottom-bar').find("a").css({"width":"100%"});}
+	else if( numFoot==2){$('.bottom-bar').find("a").css({"width":"50%"});}
+	else if( numFoot==3){$('.bottom-bar').find("a").css({"width":"33.3%"});}
+	else if( numFoot==4){$('.bottom-bar').find("a").css({"width":"25%"});}
+	else if( numFoot==5){$('.bottom-bar').find("a").css({"width":"20%"});}
+
+	// 关闭弹出框
+	$("#cancel img").click(function(){
+		$("#dialog").hide();
+		$('body,html').removeClass('notScroll');
+	});
+
+	// 删除商品
+	$("#title_top input").click(function(){
+		$(".delDialo").fadeIn();
+		var tr = $(this).parent().parent().parent().parent().parent();
+		$(tr).remove();
+        deleteCommodity($(tr).attr("id"));
+	});
+
+	$("img[name='selter']").each(function(){
+		var _this = $(this);
+		_this.click(function(){
+			changsrc(this);
+			Count(this);
+			checkFun();
+		});
+	});
+
+    // 全选
+    $("#shopping_footer img").click(function(){
+        var imgItem = $('.main_content table img');
+        var src = $(this).attr('src');
+        if(src.indexOf('yes')>0){
+            var real = src.replace('yes','no');
+            $(this).attr('src',real);
+            for(var i = 0 ; i < imgItem.length; i++) {
+                var srcImg = $(imgItem[i]).attr('src');
+                if(srcImg.indexOf('yes') > 0);{
+                    var realImg = srcImg.replace('yes','no');
+                    $(imgItem[i]).attr('src',realImg);
+                }
+            }
+            var strings = "结算（"+0+'）';
+            $("#countprict").html(0);
+            $('#btn').val(strings)
+        } else {
+            var real = src.replace('no','yes');
+            $(this).attr('src',real);
+            var label = parseInt($("#shopping_footer label").html());
+            var btn = parseInt($('#btn').val().replace(/[^0-9]/ig,""));
+            for(var i = 0; i < imgItem.length; i++) {
+                var srcImg = $(imgItem[i]).attr('src');
+                if(srcImg.indexOf('no') > 0) {
+                    var realImg = srcImg.replace('no','yes');
+                    $(imgItem[i]).attr('src',realImg);
+                    var price = parseInt($(imgItem[i]).parent().siblings().find("#price").text().replace(/[^0-9]/ig,""));
+                    var counts = parseInt($(imgItem[i]).parent().siblings().find("#count input").val());
+                    if(counts === 0){
+                        counts = 1;
+                        $(imgItem[i]).parent().siblings().find("#count input").val(1)
+                    }
+                    var all = price * counts;
+                    label += all;
+                    btn += 1;
+                }
+            }
+            var strings = "结算（" + btn + "）";
+            $("#countprict").html(label);
+            $('#btn').val(strings);
+        }
+    });
+
+    /**
+	 * 查看订单页面
+	 * */
+	function payFor(){
+        var carParam = carItems();
+        var userId = localStorage.getItem("userId");
+		window.location.href = "/mall/mallOrder/previewOrderList?userId="
+			+ userId + "&" + "commodityCarId=" + carParam;
+	}
+
+    /**
+     * 返回购物车集合列表
+     * */
+    function carItems(){
+        var carParam = [];
+        var carItems = $(".tr");
+        $(carItems).each(function(i, n){
+            carParam.push(n.getAttribute("data"));
+        });
+        return carParam;
+    }
+
+    function deleteCommodity(id){
+        $.ajax({
+            type: "POST", url: "/mall/mallCar/deleteCommodityCar/" + id, dataType: "json",
+            success:function (data) {
+                if(data.code === 0){
+                    $(".delDialo").html(data.msg).fadeOut();isnot();
+                }else {
+                    $(".delDialo").html(data.msg).fadeOut();isnot();
+                }
+            },error:function(XMLHttpRequest, textStatus, errorThrown){}
+        });
+    }
+
+    function indexJump(number) {
+        var userId = localStorage.getItem("userId");
+        switch (number){
+            case 0:
+                window.location.href = "/mall/home/index?userId=" + userId;//index.html
+                break;
+            case 1:
+                window.location.href = "/mall/commodity/listCommodityType";//classify.html
+                break;
+            case 2:
+                window.location.href = "" + userId;//integral.html
+                break;
+            case 3:
+                window.location.href = "#";//shopping.html
+                break;
+            case 4:
+                window.location.href = "/mall/h5/my.html";
+                break;
+            default:
+                window.location.href = "#";
+                break;
+        }
+    }
+
+</script>
+</body>
+</html>

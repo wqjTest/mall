@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link rel="stylesheet" type="text/css" href="css/all.css"/>
+		<script src="js/jquery-3.3.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<title></title>
+		<style type="text/css">
+			#dialog_paysanjiao{
+				height: 0.75rem;
+				width: 0.83rem;
+				border-top: 0.03rem solid #e6e6e6;
+				border-right: 0.03rem solid #e6e6e6;
+				position: absolute;
+				right: 1.78rem;
+				top: 27.7rem;
+				background: #FFFFFF;
+				transform: rotate(-45deg);
+		   }
+		</style>
+	</head>
+	<body>
+		<div id="main">
+			<div class="main_head title_center main_head_positive">
+			<button type="button" class="back_button title_left left" onclick="javaScript:history.back(-1)"></button>
+		            订单详情
+		    <span class="title_rigth right"></span>
+			</div>
+			<div id="content" class="main_content">
+				<div class="content_img" style="background-image:url(img/my/bg_delivered.png)"> 
+				</div>
+				<div class="where" onclick="lookdeliver()">
+					<span class="where-deliver" style="display: block; float: left;">
+						<!--<div style="clear: both;"></div>-->
+						物流已经在哪里
+					<!--</span>-->
+					<br />
+					<!--
+                    	作者：offline
+                    	时间：2018-12-14
+                    	描述：查看物流信息
+                    -->
+                    <script type="text/javascript">
+                    	function  lookdeliver(){
+                    		window.location.href="orderinfo-deliverInfo.html"
+                    	}
+                    </script>
+					<span class="wher-date">
+						2018-12-02 16:40:59
+					</span>
+				</div>
+				<div class="reveiving-add-have">
+				    <div class="addresser">
+				        <p>收件人:</p><span id="add-name">张三</span>
+				        <span id="phone-number">139******00</span>
+				        <span id="detalied-add">江苏省苏州市吴中区</span>
+				    </div>
+				</div>
+				<div class="waitingfor_main">
+					<ul>
+				 		<li>
+				 			<img src="img/skirt1.png"/>
+				 			<div id="img_name" class="waiiting_goodsname">港味chic优雅气质露肩长袖修身T恤+系带高腰开叉长款半身裙2018秋
+				 			</div>
+				 			<div id="img_price" class="goods_priceandqty">
+				 				<label class="table_price">299</label>
+				 				<br />
+				 				<label>x1</label>
+				 			</div>	
+				 			<div class="size">
+				 				尺码：<label>M</label>;
+				 				颜色分类：<label>黑色+灰色</label>
+				 			</div>
+				 	    </li>
+			 	    </ul>
+		 	   </div>
+		 	   <table border="0"  class="table_text">
+		 	   	<tr>
+		 	   		<td class="table_name">商品总价</td>
+		 	   		<td class="table_price ta_style">178.00</td>
+		 	   	</tr>
+		 	   	<tr>
+		 	   		<td class="table_name">运费（快递）</td>
+		 	   		<td class="table_price ta_style">0.00</td>
+		 	   	</tr>
+		 	   	<tr>
+		 	   		<td class="table_name tab_count">订单总价</td>
+		 	   		<td class="table_price ta_style tab_count">178.00</td>
+		 	   	</tr>
+		 	   </table>
+		 	   <div class="dialog_pay" >
+                 <div id="dialog_paysanjiao"></div>
+                 <p class="payfor_goodstitle">需付款</p>
+                 <p class="payfor_goodsprice">178.00</p>
+			</div>
+			<div class="order_info">
+				<table border="0" class="order_table table_text">
+					<tr>
+						<td class="order_tabletdname">订单编号：</td>
+						<td>123123123</td>
+						<td><button type="button" class="copy_tablebtn">复制</button></td>
+					</tr>
+					<tr>
+						<td class="order_tabletdname">交易账号：</td>
+						<td colspan="2">201809142222200000000</td>
+					</tr>
+					<tr>
+						<td class="order_tabletdname">创建时间：</td>
+						<td colspan="2">2018-09-14  10:02:37</td>
+					</tr>
+				</table>
+			</div>
+			<div id="contact_service">
+				<input type="button" name="" id="" value="联系客服" onclick="window.open('customerService.html','_self')"/>
+			</div>
+			<div class="space"></div>
+			</div>
+			<div style="position: fixed;bottom: 0;z-index: 10;background-color: #ffffff;" class="waiting_footer">
+		 	    	<div class="payagain" style="margin-left: calc(100% - 9rem);">
+		 	    		<input type="button" name="againbtn" id="againbtn" value="更多" class="waiting_button waiting_button1" />
+		 	    	</div>
+		 	    	<div id="" style="width: 5rem; float: right;">
+		 	    	<input type="button" name="" id="" value="确认收货" onclick="showdialog()" class="borderradius waiting_button waiting_button3" />
+		 	    	</div>		 	        
+		 	    </div>
+		   </div>
+		   <!--
+           	作者：offline
+           	时间：2018-12-10
+           	描述：确认收货
+           -->
+           <div id="showornot" class="Dialog-show showornot">
+           	<p style="font-size: 1.12rem;">收货成功</p>
+           </div>
+		</div>
+		<script type="text/javascript">
+			function showdialog(){
+				 $("#showornot").fadeIn("slow")
+				 $("#showornot").fadeOut(2000)
+			}
+		</script>
+	</body>
+</html>

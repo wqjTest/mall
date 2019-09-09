@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link rel="stylesheet" type="text/css" href="../css/dialog.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/all.css"">
+		<script src="../js/jquery-3.3.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/vue.js"></script>
+    	<script src="../js/axios.min.js"></script>
+    	<script src="../js/get.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+		#dialog_paysanjiao{
+			height: 0.75rem;
+			width: 0.83rem;
+			border-top: 0.03rem solid #e6e6e6;
+			border-right: 0.03rem solid #e6e6e6;
+			position: absolute;
+			right: 1.78rem;
+			top: 23.2rem;
+			background: #FFFFFF;
+			transform: rotate(-45deg);
+		}
+		</style>
+		<title></title>
+		<script type="text/javascript">
+    	//显示放弃付款提示框
+    	function notorok_back(){
+    		$(".dialog").css("display","flex");
+            $('body,html').addClass('notScroll');
+    	}
+    	//放弃付款
+    	function yes_back(){
+    		$(".dialog").css("display","none");
+            $('body,html').removeClass('notScroll');
+            window.history.go(-1);
+    	}
+    </script>
+	</head>
+	<body>
+		<div id="main">
+			<div class="main_head title_center main_head_positive">
+			<button type="button" class="back_button title_left left" onclick="javaScript:history.back(-1)"></button>
+		            订单详情
+		    <span class="title_rigth right"></span>
+			</div>
+			<div id="content" class="main_content">
+					<div v-if="order.payStatus == '0'">
+						<div class="content_img"
+							style="background-image:url(../img/my/bg_payinfo.png)">
+							<p class="wait_title">等待买家付款</p>'
+							<p class="wait_time">剩余<label>21小时52分钟</label>自动关闭</p>					
+						</div>
+					</div>
+					<div v-if="order.payStatus == '1'">
+						<div class="content_img"
+							style="background-image:url(../img/my/bg_payed.png">
+						</div>
+						<div class="where" onclick="return false;">
+							<span class="where-deliver" style="display: block; float: left;">
+								您的订单开始处理
+							<br />
+								<span class="wher-date">
+									{{order.payTime|formatDate}}
+								</span>
+							</span>
+						</div>
+					</div>
+					<div v-if="order.payStatus == '2'">
+						<div class="content_img"
+							style="background-image:url(../img/my/bg_delivered.png">
+						</div>
+						<div class="where" onclick="return false;">
+							<span class="where-deliver" style="display: block; float: left;">
+								<!--<div style="clear: both;"></div>-->
+								物流已经在哪里
+							<br />
+		                    <script type="text/javascript">
+		                    	function  lookdeliver(){
+		                    		window.location.href="orderinfo-deliverInfo.html"
+		                    	}
+		                    </script>
+							<span class="wher-date">
+								{{order.updateDate|formatDate}}
+							</span>
+						</div>
+					</div>
+					<div v-if="order.payStatus == '3'">
+						<div class="content_img"
+							style="background-image:url(../img/my/bg_order_success.png">
+						</div>
+					</div>
+				</div>
+				<div :style="{ height: divHeight + 'px' }"></div>
+				<div class="reveiving-add-have">
+				    <div class="addresser">
+				        <p>收件人:</p><span id="add-name" >{{order.personName}}</span>
+				        <span id="phone-number">{{order.phoneNum}}</span>
+				        <span id="detalied-add">{{order.addrDesc}}</span>
+				    </div>
+				</div>
+				<div class="waitingfor_main">
+					<ul v-for="item in order.details">
+				 		<li>
+				 			<img :src="item.goodsImg"/>
+				 			<div id="img_name" class="waiiting_goodsname">{{item.goodsName}}
+				 			</div>
+				 			<div id="img_price" class="goods_priceandqty">
+				 				<label class="table_price">{{item.price}}</label>
+				 				<br />
+				 				<label>x{{item.num}}</label>
+				 			</div>
+				 			<!-- 	
+				 			<div class="size">
+				 				尺码：<label>M</label>;
+				 				颜色分类：<label>黑色+灰色</label>
+				 			</div>
+				 			 -->
+				 	    </li>
+			 	    </ul>
+		 	   </div>
+		 	   <table border="0" class="table_text">
+		 	   	<tr>
+		 	   		<td class="table_name">商品总价</td>
+		 	   		<td class="table_price ta_style">{{order.orderAmount}}</td>
+		 	   	</tr>
+		 	   	<tr>
+		 	   		<td class="table_name" >运费（快递）</td>
+		 	   		<td class="table_price ta_style">0.00</td>
+		 	   	</tr>
+		 	   	<tr>
+		 	   		<td class="table_name tab_count">订单总价</td>
+		 	   		<td class="table_price ta_style tab_count" >{{order.orderAmount}}</td>
+		 	   	</tr>
+		 	   </table>
+		 	<div th:if="${order.payStatus} == '0'">
+			 	<div class="dialog_pay" >
+	                 <p class="payfor_goodstitle">需付款</p>
+	                 <p class="payfor_goodsprice" style="color: #F4BA33;">{{order.orderAmount}}</p>
+				</div>
+			</div>
+			<div class="order_info">
+				<table border="0" class="order_table  table_text">
+					<tr>
+						<td class="order_tabletdname">订单编号：</td>
+						<td >{{order.orderCode}}</td>
+						<td><button id="btn" type="button" class="copy_tablebtn" th:attr="data-clipboard-text=${order.orderCode}">复制</button></td>
+					</tr>
+					<!-- 
+					<tr>
+						<td class="order_tabletdname">交易账号：</td>
+						<td colspan="2">201809142222200000000</td>
+					</tr>
+					 -->
+					<tr>
+						<td class="order_tabletdname">创建时间：</td>
+						<td colspan="2">{{order.createDate|formatDate}}</td>
+					</tr>
+				</table>
+			</div>
+			<div id="contact_service">
+				<input type="button" name="" disabled id="" value="联系客服" onclick="window.open('customerService.html','_self')"/>
+			</div>
+			<!-- 
+			<div id="" style="width: 100%;height: auto; background-color: #e6e6e6;">
+				<div id="title">
+                       <div id="title_like">
+                       	 	<p class="p left"></p>
+                        <div class="cricle left"></div>                        
+                    	<span id=""style="width: 6.19rem;">
+                    		你可能还喜欢 
+                    	</span>  
+                    	<p class="p right"></p>
+                        <div class="cricle right">                        	                        
+                       </div>                   
+               </div>
+			</div>
+			</div>
+			-->
+			<div class="space"></div>
+			<div v-if="order.payStatus == '0'">
+				<div style="position: fixed;bottom: 0;z-index: 10;background-color: #ffffff;" class="waiting_footer">
+			 	    	<div class="payagain">
+			 	    		<input disabled="true" type="button" name="againbtn" id="againbtn" value="更多" class="waiting_button waiting_button1" />
+			 	    	</div>
+			 	    	<div id="" style="width: 8.88rem; float: right;">
+			 	    	<input type="button" disabled="true" name="" id="" value="取消订单" class=" borderradius waiting_button waiting_button2" />
+			 	    	<input type="button" name="" id="" value="付款" class="borderradius waiting_button waiting_button3" 
+			 	    	@click="gotocost" />
+			 	    	</div>		 	        
+			 	 </div>
+		 	 </div>
+		 	 <div v-if="order.payStatus == '1' || order.payStatus == '2'">
+			 	 <div style="position: fixed;bottom: 0;z-index: 10;background-color: #ffffff;" class="waiting_footer">
+			 	    	<div class="payagain" style="margin-left: calc(100% - 9rem);">
+			 	    		<input disabled type="button" name="againbtn" id="againbtn" value="更多" class="waiting_button waiting_button1" />
+			 	    	</div>
+			 	    	<div id="" style="width: 5rem; float: right;">
+			 	    	<input type="button" name="" id="" value="确认收货" @click="confirmOrder()" class="borderradius waiting_button waiting_button3" />
+			 	    	</div>	        
+			 	  </div>
+		 	  </div>
+		 	  <div v-if="order.payStatus == '3'">
+			 	  <div style="position: fixed;bottom: 0;z-index: 10;background-color: #ffffff;" class="waiting_footer">
+			 	    	<div class="payagain">
+			 	    		<input type="button" disabled name="againbtn" id="againbtn" value="更多" class="waiting_button waiting_button1" />
+			 	    	</div>
+			 	    	<div id="" style="width: 8.88rem; float: right;">
+			 	    	<input type="button" disabled name="" id="" value="查看物流" class=" borderradius waiting_button waiting_button2" onclick="return false;" />
+			 	    	<input type="button" disabled name="" id="" value="评价" class="borderradius waiting_button waiting_button3" onclick="return false;"/>
+			 	    	</div>		 	        
+			 	    </div>
+		 	  </div>
+		   </div>
+		   <div class="dialog">
+				<div class="dialog_title">
+					<p class="dia_title">确认放弃付款吗？</p>
+					<div class="dia_text">
+						未支付订单将在不久后自动关闭，
+						请尽快支付
+					</div>
+					<div class="dia_footer">
+						<input class="dia_footer_button dia_footer_buttonno" type="button" value="暂时放弃" onclick="yes_back()" />
+						<input class="dia_footer_button dia_footer_buttonok" type="button"  value="继续支付" onclick="no_back()"/>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+		  var padDate = function (value) {
+			    return value <10 ? '0' + value:value;
+			  };
+		
+			var app = new Vue({
+				el: '#main',
+				data: {
+					orderId : $.Request("orderid"),
+					userId	  : localStorage.getItem("userId"),
+					order:{}
+				},
+				mounted: function(){
+					this.init();
+				},
+				filters:{
+					formatDate:function (value) {
+				        var date = new Date(value);
+				        var year = date.getFullYear();
+				        var month = padDate(date.getMonth()+1);
+				        var day = padDate(date.getDate());
+				        var hours = padDate(date.getHours());
+				        var minutes = padDate(date.getMinutes());
+				        var seconds = padDate(date.getSeconds());
+				        return year + '-' + month + '-' + day + '-' + ' ' + hours + ':' + minutes + ':' + seconds;
+				      }
+				},
+				computed:{
+					divHeight : function(){
+						if (this.order.payStatus == '0' || this.order.payStatus == '3'){
+							return 140;
+						}else{
+							return 200;
+						}
+					}
+				},
+				methods: {
+					init: function(){
+						_this = this;
+						axios.get('/mall/orders/' + this.userId + "/view/" + this.orderId)
+						.then(function(response){
+							_this.order = response.data.data;
+						})
+						.catch(function (error) {
+						    console.log(error);
+						});
+					},
+					confirmOrder: function(){
+		            	_this = this;
+		            	axios.get('/mall/orders/' + _this.userId + "/confirm/" + _this.orderId)
+						.then(function(response){
+							_this.init();
+						})
+						.catch(function (error) {
+						    console.log(error);
+						});
+		            },
+		            gotocost: function(){
+						window.location.href="cost.html?orderid=" + this.orderId +"&totalamt=" + this.order.orderAmount;
+					}
+				}
+			});	
+		
+		
+		function no_back(){
+				$(".dialog").css("display","none");
+		        $('body,html').removeClass('notScroll');
+		}
+		</script>
+	</body>
+</html>

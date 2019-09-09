@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link rel="stylesheet" type="text/css" href="css/all.css"/>
+		<title></title>
+		<style type="text/css">
+			.size input{
+				background-color: transparent;
+				height: 1.19rem;
+				width: 3.75rem;
+				border-radius: 0.59rem;
+				border: solid 1px #808080;
+				font-family: SimHei;
+				font-size: 0.75rem;
+				float: right;
+				margin-right: 1rem;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="main">
+			<div class="main_head title_center main_head_positive">
+			<button type="button" class="back_button title_left left" onclick="javaScript:history.back(-1)"></button>
+		            订单详情
+		    <span class="title_rigth right"></span>
+			</div>
+			<div id="content" class="main_content">
+				<div class="content_img" style="background-image:url(img/my/bg_order_success.png)">
+							
+				</div>
+				<div class="reveiving-add-have">
+				    <div class="addresser">
+				        <p>收件人:</p><span id="add-name">张三</span>
+				        <span id="phone-number">139******00</span>
+				        <span id="detalied-add">江苏省苏州市吴中区</span>
+				    </div>
+				</div>
+				<div id="space" style="width: 100%;height: 0.31rem; background-color: #efefef;">
+					
+				</div>
+				<div class="waitingfor_main">
+					<ul>
+				 		<li>
+				 			<img src="img/skirt1.png"/>
+				 			<div id="img_name" class="waiiting_goodsname">港味chic优雅气质露肩长袖修身T恤+系带高腰开叉长款半身裙2018秋
+				 			</div>
+				 			<div id="img_price" class="goods_priceandqty">
+				 				<label class="table_price">299</label>
+				 				<br />
+				 				<label>x1</label>
+				 			</div>	
+				 			<div class="size" style="float: right;">
+				 			  <input type="button" name="" id="" value="退款" onclick="window.open('my-drawnback.html','_self')" />
+				 			</div>
+				 	    </li>
+			 	    </ul>
+		 	   </div>
+		 	   <table border="0" class="table_text">
+		 	   	<tr>
+		 	   		<td class="table_name">商品总价</td>
+		 	   		<td class="table_price ta_style">178.00</td>
+		 	   	</tr>
+		 	   	<tr>
+		 	   		<td class="table_name">运费（快递）</td>
+		 	   		<td class="table_price ta_style">0.00</td>
+		 	   	</tr>
+		 	   	<tr>
+		 	   		<td class="table_name tab_count">订单总价</td>
+		 	   		<td class="table_price ta_style tab_count">178.00</td>
+		 	   	</tr>
+		 	   </table>
+		 	   <div class="dialog_pay" >
+                 <div id="dialog_paysanjiao"></div>
+                 <p class="payfor_goodstitle">需付款</p>
+                 <p class="payfor_goodsprice" style="color: #FF0000;">178.00</p>
+			</div>
+			<div class="order_info">
+				<table border="0" class="order_table table_text">
+					<tr>
+						<td class="order_tabletdname">订单编号：</td>
+						<td>123123123</td>
+						<td><button type="button" class="copy_tablebtn">复制</button></td>
+					</tr>
+					<tr>
+						<td class="order_tabletdname">交易账号：</td>
+						<td colspan="2">201809142222200000000</td>
+					</tr>
+					<tr>
+						<td class="order_tabletdname">创建时间：</td>
+						<td colspan="2">2018-09-14  10:02:37</td>
+					</tr>
+				</table>
+			</div>
+			<div id="contact_service">
+				<input type="button" name="" id="" value="联系客服" onclick="window.open('customerService.html','_self')"/>
+			</div>
+			<!--<div style="width: 100%; height: 0.5rem; background-color: #efefef;"></div>-->
+			<div id="" style="width: 100%;height: auto; background-color: #e6e6e6;">
+				<div id="title">
+                       <div id="title_like">
+                       	 	<p class="p left"></p>
+                        <div class="cricle left"></div>                        
+                    	<span id=""style="width: 6.19rem;">
+                    		你可能还喜欢 
+                    	</span>  
+                    	<p class="p right"></p>
+                        <div class="cricle right">                        	                        
+                       </div>                   
+               </div>
+			</div>			    
+			</div>
+			<div class="space"></div>
+			<div style="position: fixed;bottom: 0;z-index: 10;background-color: #ffffff;" class="waiting_footer">
+		 	    	<div class="payagain">
+		 	    		<input type="button" name="againbtn" id="againbtn" value="更多" class="waiting_button waiting_button1" />
+		 	    	</div>
+		 	    	<div id="" style="width: 8.88rem; float: right;">
+		 	    	<input type="button" name="" id="" value="查看物流" class=" borderradius waiting_button waiting_button2" onclick="window.open('orderinfo-deliverInfo.html','_self')" />
+		 	    	<input type="button" name="" id="" value="评价" class="borderradius waiting_button waiting_button3" onclick="window.open('my-evaluate.html','_self')"/>
+		 	    	</div>		 	        
+		 	    </div>
+		   </div> 
+		</div>
+	</body>
+</html>

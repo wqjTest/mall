@@ -1,0 +1,105 @@
+<!doctype html>
+<html class="no-js" lang="zh-Hans">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
+    <meta name="application-name" content="购物开票">
+    <title>购物开票</title>
+    <link rel="stylesheet" href="../css/normalize.css">
+    <link rel="stylesheet" href="../css/main.css">
+    <script src="../js/vue.js"></script>
+    <script src="../js/axios.min.js"></script>
+<style>
+    header{
+        border-bottom: 1px solid #f8f8f8;
+        background-color: white;
+    }
+</style>
+</head>
+
+<body>
+<div class="top-space-low"></div>
+<header>
+    <div class="top">
+        <h1 class="head-title">购物开票</h1>
+        <a class="back-btn" href="javascript:void(0)" onClick="javascript :history.back(-1);"></a>
+    </div>
+</header>
+<section>
+    <div class="no-shopping-history">
+        <img src="../img/shoppingopen.svg">
+        <p>您当前没有购物</p>
+    </div>
+    <div class="have-shopping-history">
+        <ul id="app" v-module="items">
+          <li v-for="item in items">
+              <i class="left-choice-icon"></i>
+              <img class="have-shopping-history-head" src="../img/skirt1.png">
+              <p>{{item.orderCode}}</p>
+              <span class="order-num">{{item.orderCode}}</span>
+              <span class="invoice-shopping-time">{{item.createDate}}</span>
+              <span class="invoice-shopping-money">{{item.orderAmount}}</span>
+          </li>
+        </ul>
+    </div>
+    <div style="height: 3rem"></div>
+    <div class="shopping-open-bottom-btn"><a href="#" class="invoice-next-ntn">下一步</a>
+    </div>
+    <div class="no-choice"><p>请选择订单</p></div>
+</section>
+<script src="http://upcdn.b0.upaiyun.com/libs/jquery/jquery-2.0.2.min.js"></script>
+<script src="../js/plugins.js"></script>
+<script>
+    var app = new Vue({
+        el: '#app',
+        data:{
+            items: {}
+        },
+        mounted: function() {
+            _this = this;
+            var userId = localStorage.getItem("userId");
+            axios.get('/mall/invoice/listOrder/' + userId)
+                .then(function(response){
+                    _this.items = response.data.data;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        }
+    });
+
+    var a = 0;//个数
+    $('li').click(function(){
+        //左侧图标
+        var icon = $(this).children("i");
+        //订单号
+        var chooseName = $(this).children(".order-num").html();
+        //已经选过的就让他不亮
+        if (icon.hasClass("left-choice-icon-yes")) {
+            icon.removeClass("left-choice-icon-yes");
+            a--;
+            if(a <= 0){
+                $(".invoice-next-ntn").removeClass("invoice-next-ntn-yes"); //改变下一步按钮颜色
+            }
+            console.log("移除"+chooseName);
+        } else {
+            // 点亮图标 、返回订单号
+            icon.addClass("left-choice-icon-yes");
+            $(".invoice-next-ntn").addClass("invoice-next-ntn-yes"); //改变下一步按钮颜色
+            a++;
+            console.log(chooseName);
+        }
+    });
+    $('.invoice-next-ntn').click(function(){
+        if ($(this).hasClass("invoice-next-ntn-yes")) {//如果下一步按钮量 跳转到开票界面
+            window.location.href="drawAbill.html";
+        } else {
+            $(".no-choice").fadeIn();
+            setTimeout(function () {
+                $(".no-choice").fadeOut();
+            }, 1000);
+        }
+    });
+</script>
+</body>
+</html>
