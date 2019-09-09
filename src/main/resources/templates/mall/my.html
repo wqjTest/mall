@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/all.css}"/>
+    <script th:src="@{/js/jquery-3.3.1.min.js}" type="text/javascript" charset="utf-8"></script>
+    <title></title>
+</head>
+<body>
+<div class="html_main main">
+    <div class="myhead">
+        <table class="my_table1" border="0">
+            <tr>
+                <td rowspan="3">
+                    <img class="my_img1" onclick="editInfo()"
+                         th:src="${student.photo1}"/>
+                </td>
+                <script type="text/javascript">
+                    function editInfo(){$(".paddingall").fadeIn()}
+                </script>
+            </tr>
+            <tr>
+                <td>昵 称:<label id="name" th:text="${student.personName}"></label></td>
+            </tr>
+            <tr>
+                <td>积 分:<label id="score" th:text="${student.integral}"></label></td>
+            </tr>
+        </table>
+    </div>
+    <div id="content">
+        <div class="myorder_main my_list_prosition">
+            <div class="myorder_title">
+                我的订单
+                <button class="viewOrder" type="button" name="vieworder"
+                        id="vieworder" onclick="viewAllOrders(0)">查看全部订单
+                </button>
+            </div>
+            <script type="text/javascript">
+                function viewAllOrders(chancenum) {
+                	var userId = localStorage.getItem("userId");
+                	window.location.href = "/mall/orders/" + userId + "/all?chancenum=" + chancenum;
+                }
+            </script>
+            <ul>
+                <li>
+                    <img onclick="viewOrders(1);" th:src="@{/img/my/watipay.png}"/>
+                    <p>待付款</p>
+                </li>
+                <li>
+                    <img onclick="viewOrders(2);" th:src="@{/img/my/delineing.png}"/>
+                    <p>待发货</p>
+                </li>
+                <li>
+                    <img onclick="viewOrders(3);" th:src="@{/img/my/waitdeliver.png}"/>
+                    <p>待收货</p>
+                </li>
+                <li>
+                    <img onclick="viewOrders(4);" style="height: 1.4rem;width:1.2rem;" th:src="@{/img/my/eveluate.png}"/>
+                    <p>待评价</p>
+                </li>
+            </ul>
+        </div>
+        <script type="text/javascript">
+            $(".myorder_main ul li").click(function () {
+                var items = $(".myorder_main ul li")
+                var index = items.index(this) + 1;
+                var userId = localStorage.getItem("userId");
+                url = "/mall/orders/" + userId + "?chancenum=" + index;
+                window.location.href = url;
+            });
+        </script>
+        <div class="myorder_address my_list_prosition">
+            <ul>
+                <li onclick="subModuleJump(5)">
+                    <img th:src="@{/img/my/address.png}" style="height: 1.8rem;width: 1.6rem;"/>
+                    <p>地址信息</p>
+                </li>
+                <li>
+                    <img th:src="@{/img/my/normal_question.png}" style="height: 1.8rem;width: 1.8rem;"/>
+                    <p>常见问题</p>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="paddingall">
+        <div id="informtion_tou">
+            <div id="information_head">
+                <img th:src="${student.photo1}" style="border-radius: 50%"/>
+                <p style="margin:0;padding: 0;" th:text="${student.personName}"></p>
+            </div>
+            <div id="information_content">
+                <ul>
+                    <li onclick="window.open('customerService.html','_self')">
+                        <button class="btn" id="btn1" type="button">客服</button>
+                    </li>
+                    <li onclick="window.open('invoice.html','_self')">
+                        <button class="btn" id="btn2" type="button">发票报销</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="hide"></div>
+        <script type="text/javascript">
+            $("#hide").click(function () {
+                $(".paddingall").fadeOut();
+            });
+        </script>
+    </div>
+    <footer>
+        <div class="bottom-space"></div>
+        <div class="bottom-bar">
+            <a href="index.html" onclick="moduleJump(0); return false;" class="home " hidefocus="true">
+                <p>首页</p>
+            </a>
+            <a href="classify.html" onclick="moduleJump(1); return false;" class="classify" hidefocus="true">
+                <p>分类</p>
+            </a>
+            <!--<a href="integral.html" onclick="moduleJump(2); return false;" class="gold" hidefocus="true">
+                <p>积分专区</p>
+            </a>-->
+            <a href="shopping.html" onclick="moduleJump(3); return false;" class="shopping" hidefocus="true">
+                <p>购物车</p>
+            </a>
+            <a href="my.html" onclick="moduleJump(4); return false;" class="my this-page this-my" hidefocus="true">
+                <p>我的</p>
+            </a>
+        </div>
+    </footer>
+</div>
+<script>
+	/****
+	 ** 0 : 首页；1 : 分类；2：积分分区；3：购物车；4：我的
+	 **/
+    function moduleJump(num) {
+        var userId = localStorage.getItem("userId");
+        switch (num){
+            case 0:
+                window.location.href = "/mall/home/index?userId=" + userId;
+                break;
+            case 1:
+            	window.location.href = "/mall/commodity/listCommodityType";
+                break;
+            case 2:
+            	window.location.href = "/mall/home/index?userId=" + userId;
+                break;
+            case 3:
+            	window.location.href = "/mall/home/index?userId=" + userId;
+                break;
+            default:
+            	window.location.href = "/mall/h5/my.html";
+                break;
+        }
+    }
+
+    var numFoot=$('.bottom-bar').find("a").length;
+    if( numFoot==1){$('.bottom-bar').find("a").css({"width":"100%"});}
+    else if( numFoot==2){$('.bottom-bar').find("a").css({"width":"50%"});}
+    else if( numFoot==3){$('.bottom-bar').find("a").css({"width":"33.3%"});}
+    else if( numFoot==4){$('.bottom-bar').find("a").css({"width":"25%"});}
+    else if( numFoot==5){$('.bottom-bar').find("a").css({"width":"20%"});}
+
+    /****
+     ** 0 : 订单（待付款）；1：订单（代发货）；2：订单（待收货）；3：订单（待评论）；4：订单（全部）
+     ** 5 : 地址信息；6：常见问题；7：用户信息
+     ** 
+     **/
+    function subModuleJump(num) {
+        var userId = localStorage.getItem("userId");
+        switch (num){
+            case 0:
+                window.location.href = "/mall/home/index?userId=" + userId;
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            case 5:
+            	var href = "/mall/address/{0}/list";
+            	window.location.href = String.format(href, userId);
+                break;
+            case 6:
+                window.location.href = "/mall/mine/listAddress/" + userId;
+                break;
+            case 7:
+                window.location.href = "/mall/mine/listAddress/" + userId;
+                break;
+            default:
+            	return false;
+        }
+    }
+    
+    String.format = function() {
+	    if( arguments.length === 0 )
+	        return null;
+	
+	    var str = arguments[0]; 
+	    for(var i=1;i<arguments.length;i++) {
+	        var re = new RegExp('\\{' + (i-1) + '\\}','gm');
+	        str = str.replace(re, arguments[i]);
+	    }
+	    return str;
+	}
+</script>
+</body>
+</html>

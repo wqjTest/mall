@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<title></title>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/all.css}"/>
+	<script th:src="@{/js/jquery-3.3.1.min.js}" type="text/javascript" charset="utf-8"></script>
+	<script>
+		function jump(){
+		    var userId = localStorage.getItem("userId");
+		    window.location.href = "/mall/address/" + userId + "/toedit";
+		}
+	</script>
+</head>
+<body>
+<div id="main">
+	<div class="main_head title_center main_head_positive">
+		<button type="button" class="back_button1 title_left left"
+				onclick="javaScript:history.back(-1)">
+		</button>
+		收货地址
+		<span class="title_rigth right"></span>
+	</div>
+
+	<div id="content" class="main_content">
+		<div id=space></div>
+		<div id="add_address" onclick="jump();">
+			添加地址
+		</div>
+		<div id="space"></div>
+		<ul class="ullu" th:each="address:${addressList}">
+			<li>
+				<div id="info" style="float: left;">
+					<span id="name" th:text="${address.userName}">
+					</span>
+					<span id="phone" style="float: right;" th:text="${address.userPhone}"></span>
+				</div>
+				<div id="address"
+					 th:text="${address.province}+${address.city}+${address.districtCounty}+${address.address}">
+				</div>
+			</li>
+		</ul>
+	</div>
+</div>
+</body>
+</html>

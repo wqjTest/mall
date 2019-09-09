@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<title></title>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/all.css}"/>
+	<script th:src="@{/js/jquery-3.3.1.min.js}" type="text/javascript" charset="utf-8"></script>
+	<style type="text/css">
+		.consevation {
+			font-size: 1rem;
+			color: #ff9914;
+		}
+	</style>
+</head>
+<body>
+<div id="main">
+	<div class="main_head title_center main_head_positive main_head1">
+		<button type="button" class="back_button2 title_left"  onclick="javaScript:history.back(-1)"></button>
+		发表评价
+		<button class="title_rigth consevation" onclick="release()">保存</button>
+		<script type="text/javascript">
+			function release(){
+			    var userId = localStorage.getItem("userId");
+			    var orderId = "";
+			    var commodityId = "";
+			    var lave = "";
+                var commentType = "";
+                var anonymousFlag = "";
+			    $.ajax({
+					url:"/mall/comments/save",
+					type:"POST",
+					data:JSON.stringify({
+						"userId":userId,
+						"orderId":orderId,
+						"commodityId":commodityId,
+						"lave":lave,
+						"commentType":commentType,
+						"anonymousFlag":anonymousFlag
+					}),
+					dataType:"json",
+					contentType:"application/json",
+					success:function (data) {
+                        $("#showornot").fadeIn();
+                        $("#showornot").fadeOut();
+                        setTimeout('window.location.href="my-evaluate-success.html"',1000);
+                    },
+					error: function(XMLHttpRequest, textStatus, errorThrown){}
+				});
+			}
+		</script>
+	</div>
+	<div id="content" class="main_content">
+		<div id="content_title">
+			<div id="title_left" class="left">
+				<img th:src="@{/img/skirt1.png}"/>
+				<span style="float: left; margin-left: 0.69rem; line-height: 4.34rem;">描述相同</span>
+			</div>
+			<div id="title_right" class="right">
+				<ul>
+					<li style="padding-top: 0.5rem;">
+						<img th:src="@{/img/my/yes/happy.png}"/>
+						<p style="margin: 0; font-size: 0.93rem; color: #ff9f40;">好评</p>
+					</li>
+					<li style="padding-top: 0.5rem;">
+						<img th:src="@{/img/my/no/sad.png}"/>
+						<p style="margin: 0; font-size: 0.93rem; color: #636363;">差评</p>
+					</li>
+				</ul>
+			</div>
+			<script type="text/javascript">
+				$("#title_right ul li").click(function(){
+					var items=$("#title_right ul li");
+					var img=$(this).children().eq(0);
+					for(var i=0;i<items.length;i++){
+						if(i==items.index(this)){
+							var real = $(img).attr('src').replace('no','yes');
+							$(this).children().eq(0).attr('src',real);
+							$(this).children().eq(1).css('color','#ff9f40');
+						} else {
+							var real = $(items[i]).children().eq(0).attr('src').replace('yes','no');
+							$(items[i]).children().eq(0).attr('src',real);
+							$(items[i]).children().eq(1).css('color','#636363');
+						}
+					}
+				});
+			</script>
+		</div>
+		<div id="evaluate_content">
+			<textarea name="evaluate"
+					  placeholder="宝贝满足你的期待吗？&#10说说他的优点和美中不足的地方吧">
+			</textarea>
+		</div>
+		<div id="footer">
+			<img th:src="@{/img/my/result/no.png}"/>匿名
+		</div>
+		<script type="text/javascript">
+			$("#footer img").click(function(){
+				var src = $(this).attr('src');
+				if(src.indexOf("yes")>0){
+					var real = src.replace("yes",'no');
+					$(this).attr('src',real);
+				} else {
+					var real = src.replace("no",'yes');
+					$(this).attr('src',real);
+				}
+			});
+		</script>
+		<div id="space"></div>
+	</div>
+	<div id="showornot" class="Dialog-show showornot">
+		<p style="font-size: 1.12rem;">评价成功</p>
+	</div>
+</div>
+</body>
+</html>

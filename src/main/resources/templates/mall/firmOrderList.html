@@ -1,0 +1,139 @@
+<!doctype html>
+<html class="no-js" lang="zh-Hans" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
+    <meta name="application-name" content="确认订单">
+    <title>确认订单</title>
+    <link rel="stylesheet" th:href="@{/css/all.css}" />
+    <script th:src="@{/js/jquery-3.3.1.min.js}" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+        //显示放弃付款提示框
+        function notorok_back(){
+            //$(".dialog").css("display","flex");
+            //$('body,html').addClass('notScroll');
+        }
+        //放弃付款
+        function yes_back(){
+            //$(".dialog").css("display","none");
+            //$('body,html').removeClass('notScroll');
+            //window.history.go(-1);
+        }
+    </script>
+</head>
+<body>
+<div class="top-space-low"></div>
+<header>
+    <div class="main_head title_center main_head_positive">
+        <button type="button" class="back_button title_left left" onclick="notorok_back()"></button>
+        确认订单
+        <span class="title_rigth right"></span>
+    </div>
+</header>
+<div id="content" class="main_content">
+    <div class="reveiving-add-have">
+        <div th:if="${address != null}" th:id="${address.id}" class="addresser">
+            <p>收件人:</p><span id="add-name" th:text="${address.userName}">张三</span>
+            <span id="phone-number" th:text="${address.userPhone}"></span>
+            <span id="detalied-add" th:text="${address.province}
+        + ${address.city} + ${address.districtCounty}
+        + ${address.address}"></span>
+        </div>
+    </div>
+    <div id="space"></div>
+    <ul class="firm-shopping-ul">
+        <li th:class="firm-shopping-ul-li" th:each="mallCommodity:${mallCommodityList}" th:data="${mallCommodity.id}">
+            <img th:src="${mallCommodity.commodityImage}">
+            <h6 th:text="${mallCommodity.commodityName}"></h6>
+            <span class="firm-parameter" th:text="'×' + ${mallCommodity.saleNum}"></span>
+            <span class="firm-price-number" th:text="'￥' + ${mallCommodity.price}"></span>
+        </li>
+    </ul>
+
+    <ul class="firm-mode-ul">
+        <li>
+            <p class="li-name">配送方式</p>
+            <span class="express" style="margin-right: 1rem;">快递 包邮</span>
+        </li>
+        <li>
+            <p class="li-name">买家留言:</p>
+            <input type="text"  id="lave" placeholder="选填：填写内容和卖家协商确认">
+        </li>
+        <li>
+            <div class="subtotal">
+                <span class="order-money" th:text="${mallCommodityList.size()}"></span>
+                <p>小计：</p>
+                <p>共<span class="firm-shopping-num" th:text="${mallCommodityList.size()}"></span>件商品</p>
+            </div>
+        </li>
+    </ul>
+    <div style="height: 2.6rem"></div>
+</div>
+<div class="bottom-order-message">
+    <button type="button" id="place-order" onclick="gotoCost()">去付款</button>
+    <p style="float: left;margin-left: 1.2rem;">合计金额:</p>
+    <span style="float: left" class="order-money" th:text="${mallCommodityList.size()}"></span>
+</div>
+
+<div class="dialog">
+    <div class="dialog_title">
+        <p class="dia_title">确认放弃付款吗？</p>
+        <div class="dia_text">
+            未支付订单将在不久后自动关闭，请尽快支付
+        </div>
+        <div class="dia_footer">
+            <input class="dia_footer_button dia_footer_buttonno" type="button" value="暂时放弃" onclick="yes_back()" />
+            <input class="dia_footer_button dia_footer_buttonok" type="button"  value="继续支付" onclick="no_back()"/>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function no_back(){
+        //$(".dialog").css("display","none");
+        //$('body,html').removeClass('notScroll');
+    }
+    /**
+     * 去付款
+     * */
+    function gotoCost(){
+        var userId = localStorage.getItem("userId");
+        var lave = $("#lave").val();
+        var addressId = $(".addresser").attr("id");
+        var carParam = carItems();
+        if(typeof addressId == "undefined" || addressId.length <= 0){
+            alert("地址不能为空！");
+            return;
+        }
+        $.ajax({
+            type: "POST",
+            url: "/mall/mallOrder/createOrderList",
+            data: JSON.stringify({
+                "carParam":carParam,
+                "userId":userId,
+                "lave":lave,
+                "addressId":addressId
+            }),
+            dataType: "json",
+            contentType: "application/json",
+            success:function (data) {
+                window.location.href = "/mall/mallOrder/viewOrder/" + data.data;
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown){}
+        });
+    }
+
+    /**
+     * 返回购物车集合列表
+     * */
+    function carItems(){
+        var carParam = new Array();
+        var carItems = $(".firm-shopping-ul-li");
+        $(carItems).each(function(i, n){
+            carParam.push(n.getAttribute("data"));
+        });
+        return carParam;
+    }
+</script>
+</body>
+</html>

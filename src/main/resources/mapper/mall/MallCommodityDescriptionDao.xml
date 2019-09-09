@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.atongmu.mall.mall.dao.MallCommodityDescriptionDao">
+
+    <select id="getCommodityDescription"
+            parameterType="com.atongmu.mall.mall.entity.MallCommodityDescription"
+            resultType="com.atongmu.mall.mall.entity.MallCommodityDescription">
+        SELECT
+		a.commodity_id AS "commodityId",
+		a.description_name AS "descriptionName",
+		a.description_type AS "descriptionType",
+		a.description_content AS "descriptionContent"
+        FROM
+        mall_commodity_description a
+        WHERE
+        1=1
+        AND a.commodity_id = #{commodityId}
+        AND a.description_type = #{descriptionType}
+    </select>
+
+</mapper>

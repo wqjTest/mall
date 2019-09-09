@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.atongmu.mall.student.dao.KigStudentDao">
+
+    <select id="getStudent"
+            resultType="com.atongmu.mall.student.entity.KigStudent">
+        SELECT
+        person_name AS "personName",
+        integral_total AS "integral",
+        photo_1 AS "photo1"
+        FROM
+        kig_student
+        WHERE
+        id = #{id}
+    </select>
+
+</mapper>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link rel="stylesheet" type="text/css" href="css/all.css"/>
+		<title></title>
+		<style type="text/css">
+		#back_btn{
+			width: calc(100% - 0.47rem);
+			height: 2.06rem;
+			padding-left: 0.47rem;
+			padding-top: 0.69rem;
+		}
+		.back_button3{
+			background-image: url(img/back-white.svg);
+		}
+		#success_img{
+			text-align: center;
+			color: #FFFFFF;
+		}
+		.success_title{
+			font-size: 1.49rem;
+			height: 2.16rem;
+			line-height: 2.16rem;
+			width: 9.82rem;
+			margin: 0 auto;
+		}
+		.success_title:before{
+			content: "";
+			width: 2.16rem;
+			height: 2.16rem;
+			background-image: url(img/my/success.png);
+			background-repeat: no-repeat;
+			background-size: cover;
+			display: block;
+			float: left;
+		}
+		.back_home{
+			width: 6.25rem;
+			height: 1.88rem;
+			border-radius: 0.94rem;
+			border: solid 1px #ffffff;
+			font-size: 0.93rem;
+			color: #f2f2f2;
+			
+		}
+
+		</style>
+	</head>
+	<body>
+		<div id="main">
+			<div class="head">
+			  <div id="back_btn">
+			  	<button class="back_button3 title_left" type="button" onclick="javaScript:history.go(-2)" ></button>
+			  </div>
+			  <div id="success_img">
+			  	 <p class="success_title">评价成功</p>
+			  	 <p style="font-size: 1rem;">坚持写评价，淘气值得快哦</p>
+			  	 <button class="back_home" type="button"  onclick="window.open('index.html','_self')">返回首页</button>
+			  </div>
+			</div>
+			
+		</div>
+	</body>
+</html>

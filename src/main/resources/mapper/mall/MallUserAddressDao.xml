@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.atongmu.mall.mall.dao.MallUserAddressDao">
+
+    <select id="listUserAddress"
+            resultType="com.atongmu.mall.mall.entity.MallUserAddress">
+        SELECT
+        id AS "id",
+        user_id AS "userId",
+        user_name AS "userName",
+        user_phone AS "userPhone",
+        province AS "province",
+        city AS "city",
+        district_county AS "districtCounty",
+        address AS "address",
+        default_flag AS "defaultFlag",
+        flag as "flag"
+        FROM
+        mall_user_address
+        WHERE
+        user_id = #{userId} and del_flag='0'
+    </select>
+    
+     <select id="getByUserIdAndAddressId"
+            resultType="com.atongmu.mall.mall.entity.MallUserAddress">
+        SELECT
+        id AS "id",
+        user_id AS "userId",
+        user_name AS "userName",
+        user_phone AS "userPhone",
+        province AS "province",
+        city AS "city",
+        district_county AS "districtCounty",
+        address AS "address",
+        default_flag AS "defaultFlag",
+        flag as "flag"
+        FROM
+        mall_user_address
+        WHERE
+        user_id = #{userId} and id = #{addressId} and del_flag='0'
+    </select>
+	
+	<insert id="insert">
+		INSERT INTO mall_user_address(
+			id,
+			user_id,
+			user_name,
+			user_phone,
+			province,
+			city,
+			district_county,
+			address,
+			default_flag,
+			flag,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{userId},
+			#{userName},
+			#{userPhone},
+			#{province},
+			#{city},
+			#{districtCounty},
+			#{address},
+			#{defaultFlag},
+			#{flag},
+			#{userId},
+			NOW(),
+			#{userId},
+			NOW(),
+			'',
+			'0'
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE mall_user_address SET
+			date_modified = NOW(),
+			user_name=#{userName},
+			user_phone=#{userPhone},
+			province=#{province},
+			city=#{city},
+			district_county=#{districtCounty},
+			address=#{address},
+			default_flag=#{defaultFlag},
+			flag=#{flag}
+		WHERE id = #{addressId} and user_id = #{userId}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM mall_user_address
+		WHERE id = #{addressId} and user_id = #{userId}
+	</update>
+</mapper>

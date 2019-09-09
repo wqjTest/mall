@@ -1,0 +1,102 @@
+<!doctype html>
+<html class="no-js" lang="zh-Hans">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
+    <meta name="application-name" content="积分专区">
+    <title>积分专区</title>
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/main.css">
+    <!--<link rel="stylesheet" href="css/integral.css">-->
+
+</head>
+
+
+<body>
+<!-- Add your site or application content here -->
+<!--<div class="top-space-low"></div>-->
+<header id="header">
+    <div class="top">
+        <a class="back-btn" href="javascript:void(0)" onClick="javascript :history.back(-1);"></a>
+        <h1 id="header-title" class="head-title" style="color: rgba(66,66,66,0.0)">福利大放送</h1>
+    </div>
+</header>
+<section>
+    <div class="top-picture">
+        <img src="img/banner-box-1.png">
+    </div>
+    <div class="jifen-piece">
+        <ul>
+            <li onclick="window.open('details-jifen.html','_self')" class="piece-li">
+                <img src="img/goods-1.png">
+                <h6>微型迷你拼接小颗粒拼装积木拼插钻石益312312312312312312智玩具兼容乐高成人马里奥</h6>
+                <div class="integral-jifen-price"><span class="jifen">20000</span><span class="price-number">18.60</span></div>
+                <p class="history-num">39</p>
+                <a href="#" class="exchange">立即兑换</a>
+            </li>
+            <li onclick="window.open('details-jifen.html','_self')" class="piece-li">
+                <img src="img/goods-1.png">
+                <h6>微型迷你拼接小颗粒拼装积木拼插钻石益312312312312312312智玩具兼容乐高成人马里奥</h6>
+                <div class="integral-jifen-price"><span class="jifen">20000</span><span class="price-number">18.60</span></div>
+                <p class="history-num">39</p>
+                <a href="#" class="exchange">立即兑换</a>
+            </li>
+            <li onclick="window.open('details-jifen.html','_self')" class="piece-li">
+                <img src="img/goods-1.png">
+                <h6>微型迷你拼接小颗粒拼装积木拼插钻石益312312312312312312智玩具兼容乐高成人马里奥</h6>
+                <div class="integral-jifen-price"><span class="jifen">20000</span><span class="price-number">18.60</span></div>
+                <p class="history-num">39</p>
+                <a href="#" class="exchange">立即兑换</a>
+            </li>
+            <li onclick="window.open('details-jifen.html','_self')" class="piece-li">
+                <img src="img/goods-1.png">
+                <h6>微型迷你拼接小颗粒拼装积木拼插钻石益312312312312312312智玩具兼容乐高成人马里奥</h6>
+                <div class="integral-jifen-price"><span class="jifen">20000</span><span class="price-number">18.60</span></div>
+                <p class="history-num">39</p>
+                <a href="#" class="exchange">立即兑换</a>
+            </li>
+            <li onclick="window.open('details-jifen.html','_self')" class="piece-li">
+                <img src="img/goods-1.png">
+                <h6>微型迷你拼接小颗粒拼装积木拼插钻石益312312312312312312智玩具兼容乐高成人马里奥</h6>
+                <div class="integral-jifen-price"><span class="jifen">20000</span><span class="price-number">18.60</span></div>
+                <p class="history-num">39</p>
+                <a href="#" class="exchange">立即兑换</a>
+            </li>
+        </ul>
+    </div>
+</section>
+<footer>
+    <div class="bottom-space"></div>
+    <div class="bottom-bar">
+        <a href="index.html" class="home" hidefocus="true"><p>首页</p></a>
+        <a href="classify.html" class="classify" hidefocus="true"><p>分类</p></a>
+        <!--<a href="integral.html" class="gold this-gold this-page" hidefocus="true"><p>积分专区</p></a>-->
+        <a href="shopping.html" class="shopping" hidefocus="true"><p>购物车</p></a>
+        <a href="my.html" class="my" hidefocus="true"><p>我的</p></a>
+    </div>
+</footer>
+<script src="http://upcdn.b0.upaiyun.com/libs/jquery/jquery-2.0.2.min.js"></script>
+<script>
+    window.onscroll = function () {
+        var h = document.documentElement.scrollTop || document.body.scrollTop;
+        // console.log(h*1.25);      //控制台查看监听滚动
+        var headerTop = document.getElementById("header");
+        var headerTitle = document.getElementById("header-title")
+        if (h >= 80) {       //header的高度是80px;
+            headerTop.style.background = "#fff";
+            headerTitle.style.color = "rgba(66,65,66,1)";
+        } else {
+            if (h < 20) {
+                //40*2.5=100;这样透明度就可以由0渐变到100%；
+                headerTop.style.background = "rgba(0,0,0,0)";
+                headerTitle.style.color = "rgba(66,66,66,0)";
+            } else if (h > 20 && h <= 80) {
+                headerTop.style.background = "rgba(255,255,255,0." + h * 1.25 + ")";
+                headerTitle.style.color = "rgba(66,66,66,0." + h * 1.25 + ")";
+            }
+        }
+    };
+</script>
+</body>
+
+</html>

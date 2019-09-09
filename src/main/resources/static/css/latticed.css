@@ -1,0 +1,35 @@
+.right-btn {
+    background-image: url("../img/latticed.svg");
+}
+
+.content {
+    width: calc(100% - 1rem);
+    margin-top: .8rem;
+    padding: 0 .5rem;
+    background-color: #f6f6f6;
+    overflow: hidden;
+}
+
+.goods {
+    width: calc(50% - .4rem);
+    margin: 0 .2rem .8rem .2rem;
+    float: left;
+    background-color: #fff;
+}
+
+.goods img {
+    width: 100%;
+}
+
+.goods-title {
+    white-space: nowrap;
+}
+
+.price .price-number {
+    margin: .6rem 0;
+}
+
+.price {
+    padding-bottom: .8rem;
+}
+

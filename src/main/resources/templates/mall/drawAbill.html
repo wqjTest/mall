@@ -1,0 +1,180 @@
+<!doctype html>
+<html class="no-js" lang="zh-Hans" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
+    <meta name="application-name" content="开具电子发票">
+    <title>开具电子发票</title>
+    <link rel="stylesheet" th:href="@{/css/normalize.css}">
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" th:href="@{/css/ydui.css}">
+    <style>
+        header{
+            background-color: white;
+        }
+    </style>
+</head>
+<body>
+<div class="top-space-low"></div>
+<header>
+    <div class="top">
+        <h1 class="head-title">开具电子发票</h1>
+        <a class="back-btn" href="javascript:history.back(-1)"></a>
+    </div>
+</header>
+<section>
+    <div class="choice-type">选择发票类型</div>
+    <div class="material-selection">
+        <a id="elec" href="#"  onclick="electronics()">电子发票</a>
+        <a id="pap" href="#" class="chice-title-a" onclick="Paperquality()">纸质发票</a>
+    </div>
+    <script type="text/javascript">
+        var invoiceHead = "";
+    	function electronics(){
+            invoiceHead = "electronic";
+            $("#email").removeClass("isEmail");
+            $("#zhizhi").addClass("isEmail");
+            $('#pap').addClass("chice-title-a");
+    		$('#elec').removeClass("chice-title-a");
+            $("input").val("");
+    	}
+    	function Paperquality(){
+            invoiceHead = "paper";
+            $("#email").addClass("isEmail");
+            $("#zhizhi").removeClass("isEmail");
+            $('#elec').addClass("chice-title-a");
+    		$('#pap').removeClass("chice-title-a");
+            $("input").val("");
+    	}
+    </script>
+    <div class="choice-title">
+        <p>抬头类型</p> 
+        <a id="per" href="#"  onclick="person()">个人</a>
+        <a id="com" href="#"class="chice-title-a"  onclick="company()">公司</a>
+    </div>
+    <script type="text/javascript">
+        var invoiceType="";
+    	function person(){
+            invoiceType = "person";
+    		if(!$("#showDuty").hasClass("perOrcom")) {
+    		 $("#showDuty").addClass("perOrcom")	
+    		}
+    		$('#com').addClass("chice-title-a")
+    		$('#per').removeClass("chice-title-a")
+            $("input").val("");
+    	}
+    	function company(){
+            invoiceType = "company";
+    		$("#showDuty").removeClass("perOrcom")
+    		$('#com').removeClass("chice-title-a")
+    		$('#per').addClass("chice-title-a")
+    		$("input").val("");
+    	}
+    </script>
+    <ul class="drawer-info">
+        <li>
+            <span>发票抬头<i></i></span>
+            <input type="text" name="type-title" id="type-title" class="drawer-info-input"  placeholder="请输入发票抬头">
+        </li>
+        <li id="showDuty" class="perOrcom">
+            <span>税号<i></i></span>
+            <input type="text" name="duty-paragraph" id="duty-paragraph" class="drawer-info-input"  placeholder="请输入纳税人识别号">
+        </li>
+        <li>
+            <span>发票内容<i></i></span>
+            <select class="drawer-info-select" id="drawer-info-select">
+                <!--<option value="" disabled selected hidden>个人采购/团队采购</option>-->
+                <option value ="volvo" disabled selected hidden>个人采购</option>
+                <option value ="saab">团队采购</option>
+            </select>
+        </li>
+        <li>
+            <span>发票金额<i></i></span>
+            <p class="drawer-info-money" th:text="${mallOrderInvoice.invoiceAmount}"></p>
+        </li>
+        <li>
+            <span>更多信息<i></i></span>
+            <input type="text" name="type-more" id="type-more" class="drawer-info-input"  placeholder="填写备注等(非必填)">
+        </li>
+        <div class="choice-type">接收方式</div>
+        <li id="email">
+            <span>电子邮件<i></i></span>
+            <input type="email" name="type-email" id="type-email" class="drawer-info-input"  placeholder="用于向您发送电子发票">
+        </li>
+        <div id="zhizhi" class="isEmail">
+        	<li>
+            <span>收件人<i></i></span>
+            <input type="text" name="type-name" id="type-name" class="drawer-info-input"  placeholder="填写收件人">
+        </li>
+        <li>
+            <span>联系电话<i></i></span>
+            <input type="number" name="type-phone" id="type-phone" class="drawer-info-input"  placeholder="13500000000">
+        </li>
+        <li>
+            <span>所在地区<i></i></span>
+            <input type="text" class="drawer-info-input" readonly id="J_Address" placeholder="用于向您发送电子发票">
+        </li>
+        <li>
+            <span>详细地址<i></i></span>
+            <input type="text" name="type-address" id="type-address" class="drawer-info-input"  placeholder="填写详细地址">
+        </li>
+        </div>
+    </ul>
+    <div style="height: 2.5rem"></div>
+    <div class="bottom-collect-btn">
+        <button id="collect">提交</button>
+    </div>
+</section>
+
+<script th:src="@{http://upcdn.b0.upaiyun.com/libs/jquery/jquery-2.0.2.min.js}"></script>
+<script th:src="@{/js/plugins.js}"></script>
+<script th:src="@{//static.ydcss.com/uploads/ydui/ydui.citys.js}"></script>
+<script th:src="@{/js/ydui.js}"></script>
+<script th:inline="javascript">
+    var $address = $('#J_Address');
+    $address.citySelect();
+    $address.on('click', function () {
+        $address.citySelect('open');
+    });
+    $address.on('done.ydui.cityselect', function (ret) {
+        $(this).val(ret.provance + ' ' + ret.city + ' ' + ret.area);
+    });
+    $("#collect").bind("click",function () {
+       uploadInvoice();
+    });
+    function uploadInvoice() {
+        var invoiceTitle = $("#type-title").val();		// 发票抬头
+        var identificationNumber = $("#duty-paragraph").val();		// 纳税人识别码
+        var invoiceContent = $("#drawer-info-select option:selected").val();		// 发票内容
+        var invoiceAddress = $("#J_Address").val() + $("#type-address").val();		// 发票地址
+        var invoiceRecipient = $("#type-name").val();		// 发票收件人姓名
+        var invoicePhone = $("#type-phone").val();		// 发票收件人电话
+        var invoiceEmail = $("#type-email").val();
+        var remarks = $("#type-more").val();// 发票收件人电子邮箱
+        $.ajax({
+            url:"/mall/invoice/saveInvoice",
+            type:"POST",
+            data:JSON.stringify({
+                "id":[[${mallOrderInvoice.id}]],
+                "invoiceType":invoiceType,
+                "invoiceHead":invoiceHead,
+                "invoiceTitle":invoiceTitle,
+                "identificationNumber":identificationNumber,
+                "invoiceContent":invoiceContent,
+                "invoiceAddress":invoiceAddress,
+                "invoiceRecipient":invoiceRecipient,
+                "invoicePhone":invoicePhone,
+                "invoiceEmail":invoiceEmail,
+                "remarks":remarks
+            }),
+            dataType:"json",
+            contentType:"application/json",
+            success:function (data) {
+                window.location.href = "/mall/invoice/listInvoice/" + localStorage.getItem('userId');
+            },
+            error:function () {}
+        });
+    }
+</script>
+</body>
+</html>

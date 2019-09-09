@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link rel="stylesheet" type="text/css" href="css/all.css"/>
+		<script src="js/jquery-3.3.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<title></title>
+	</head>
+	<body>
+		<div id="main">
+			<div class="main_head title_center main_head_positive ">
+			<button type="button" class="back_button2 title_left left" onclick="javaScript:history.back(-1)"></button>
+		            退款详情
+		    <span class="title_rigth right"></span>
+			</div>
+			<div class="main_content">
+				<div class="informationResult">
+				  <p class="information information_p">请等待商家处理</p>
+				  <span class="information information_span">还剩1天23时59分</span>	
+				</div>
+				<div id="result_drawnback">
+				你已成功发起退款申请，请耐心等待商家处理
+			    </div>
+			    <div id="info_process">
+			    	<p>商家同意或者超时未处理，系统将退款给您</p>
+			    	<p>如商家拒绝，您可以修改退款申请在此发起，商家会重新处理</p>
+			    	<div id="drawnback_button">
+			    		<input class="conect_sevice"  type="button" value="联系客服"/>			    		
+			    		<input class="update Cancellation_of_application" type="button" value="撤销申请" onclick="cancellationCliclk()" />
+			    		<input class="update Amendment_application" type="button" name="" id="" value="修改申请" />
+			    	</div>
+			    </div>
+			    <div style="width: 100%; height: 0.31rem; background-color: #f4f4f4;"></div>
+			    <p class="history" style="padding-left: 0.56rem;">协商历史</p>
+			    <div style="width: 100%; height: 0.31rem; background-color: #f4f4f4;"></div>
+			    <div id="drawnbackinfo_img">
+			    	<p style="padding-left: 0.56rem;">退款信息</p>
+				<ul>
+					<li>
+						<img src="img/skirt1.png"/>
+						<div id="">
+							画画工具儿童绘画套装画笔礼盒水彩小幼美术生学习用品生日礼物
+						</div>
+					</li>
+				</ul>
+				<div id="introtuction">
+					<p class="introuction_reson">拍错了/不想要</p>
+					<p class="introuction_price">299.00</p>
+					<p class="introuction_time">2018-12-3 16:42</p>
+					<p class="introuction_number">2018-12-3 16:42</p>
+				</div>
+			</div>
+			<!--
+            	作者：offline
+            	时间：2018-12-12
+            	描述：撤销申请
+            -->
+            <div class="dialog">
+				<div class="dialog_title">
+					<!--<p class="dia_title">确认放弃付款吗？</p>-->
+					<div class="dia_text">
+						您将撤回本次申请，如果问题未解决，您还可以再次发起
+					</div>
+					<div class="dia_footer">
+						<input class="dia_footer_button dia_footer_buttonno" type="button" value="取消" onclick="yes_back()" />
+						<input class="dia_footer_button dia_footer_buttonok" type="button"  value="确定" onclick="no_back()" />
+					</div>
+				</div>
+			</div>
+			<script type="text/javascript">
+				function cancellationCliclk(){
+            		$(".dialog").css("display","flex");
+	                $('body,html').addClass('notScroll');
+            		
+            	}
+				function yes_back(){
+					$(".dialog").css("display","none");
+	                $('body,html').removeClass('notScroll');
+				}
+			</script>
+			<!--
+            	作者：offline
+            	时间：2018-12-12
+            	描述：撤销申请成功
+            -->
+			<div class="delDialo">
+        	撤销成功
+            </div>
+            <script type="text/javascript">
+            	function no_back(){
+            		$(".dialog").css("display","none");
+            		$(".delDialo").fadeIn();
+            		$('body,html').removeClass('notScroll');
+            		$(".delDialo").fadeOut(2000);
+            		
+            	}
+            </script>
+		</div>
+	</body>
+</html>

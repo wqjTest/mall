@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<script th:src="@{/js/jquery-3.3.1.min.js}" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" th:href="@{/css/ydui.css}">
+	<link rel="stylesheet" th:href="@{/css/demo.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{/css/all.css}"/>
+	<title></title>
+	<style type="text/css">
+		.consevation{
+			text-align: center;
+			font-size: 1.12rem;
+		}
+	</style>
+</head>
+<body>
+<div id="main">
+	<div class="main_head title_center main_head_positive">
+		<button type="button" class="back_button2 title_left" onclick="javaScript:history.back(-1)"></button>
+		<span>添加地址</span>
+		<button class="title_rigth consevation" onclick="saveAddress()">保存</button>
+	</div>
+	<div id="form" class="main_content">
+		<form action="#">
+			<ul class="tanb">
+				<li>
+					<input type="text" name="name" id="name" placeholder="收件人"/>
+					<p id="namewarn" class="warn">请输入正确用户名</p>
+				</li>
+				<li>
+					<input type="tel" name="phone" id="phone" style="width: calc(100% - 4.5rem);" placeholder="手机号码"/>
+					<p id="phonewarn" class="warn">请输入正确的手机号</p>
+				</li>
+				<li>
+					<section class="g-scrollview">
+						<div class="m-cell">
+							<div class="cell-item">
+								<div class="cell-right cell-arrow">
+									<input type="text" class="cell-input" readonly="readonly" id="J_Address" placeholder="所在地区">
+								</div>
+							</div>
+						</div>
+					</section>
+					<script th:src="@{http://static.ydcss.com/uploads/ydui/ydui.citys.js}"></script>
+					<script th:src="@{/js/ydui.js}"></script>
+					<script>
+						!function () {
+							var $address = $('#J_Address');
+							$address.citySelect();
+							$address.on('click', function () {
+								$address.citySelect('open');
+							});
+							$address.on('done.ydui.cityselect', function (ret) {
+								/* 省：ret.provance */
+								/* 市：ret.city */
+								/* 县：ret.area */
+								$(this).val(ret.provance + ' ' + ret.city + ' ' + ret.area);
+							});
+						}();
+					</script>
+				</li>
+				<li>
+					<textarea id="address" rows="3" placeholder="详细地址：如道路、门牌号、小区、单元等"></textarea>
+				</li>
+			</ul>
+			<div style="width: 100%;height: 0.47rem;background-color: #f4f4f4;">
+			</div>
+			<div id="other" style="margin-left: 0.78rem;">
+				<p style="font-size: 0.93rem;">地址标签</p>
+				<ul>
+					<li class="activeli">家</li>
+					<li>公司</li>
+					<li>学校</li>
+				</ul>
+			</div>
+			<div id="footer_address">
+				设为默认地址
+				<div id="swith" class="switch_off">
+					<div class="switch_box"></div>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+	$("#swith").click(function(){
+		if($("#swith").hasClass("switch_off")){
+			$("#swith").removeClass("switch_off");
+			$("#swith").addClass("switch_on");
+		} else{
+			$("#swith").removeClass("switch_on");
+			$("#swith").addClass("switch_off");
+		}
+	});
+	$("#other ul li").click(function(){
+		var items =$("#other ul li");
+		for(var i=0;i<items.length;i++){
+			if(i==items.index(this)){
+				$(this).addClass("activeli");
+			} else if($(items[i]).hasClass("activeli")){
+				$(items[i]).removeClass("activeli");
+			}
+		}
+	});
+</script>
+<script type="text/javascript">
+	$("form :input").blur(function(){
+		if($(this).is("#name")){
+			var nameVal = $.trim(this.value);
+			var regName =/^[\u4E00-\u9FA5A-Za-z]+$/;
+			if(!regName.test(nameVal)){
+				$("#namewarn").css("display",'block');
+				return false;
+			} else {
+				$("#namewarn").css("display",'none');
+				return true;
+			}
+		}
+		if($(this).is("#phone")){
+			var phoneVal = $.trim(this.value);
+			var regPhone = /^1[34578]\d{9}$/;
+			if(!regPhone.test(phoneVal)){
+				$("#phonewarn").css("display",'block');
+				return false;
+			} else {
+				$("#phonewarn").css("display",'none');
+				return true;
+			}
+		}
+	});
+</script>
+<script>
+	String.format = function() {
+	    if( arguments.length == 0 )
+	        return null;
+	
+	    var str = arguments[0]; 
+	    for(var i=1;i<arguments.length;i++) {
+	        var re = new RegExp('\\{' + (i-1) + '\\}','gm');
+	        str = str.replace(re, arguments[i]);
+	    }
+	    return str;
+	}
+
+	// 保存地址操作
+    function saveAddress(){
+    	var userId = localStorage.getItem("userId");
+    	var name = $("#name").val();
+		var phone = $("#phone").val();
+		var jaddress = $('#J_Address').val();
+		var address =  $("#address").val();
+		var defaultFlag = getDefaultFlag();
+		var flag = getFlag();
+		var addressId = '';
+		
+		var hrefFormat = "/mall/address/{0}/save?name={1}&phone={2}&jaddress={3}&address={4}&flag={5}&defaultFlag={6}&addressId={7}";
+		window.location.href = String.format(hrefFormat, userId, name, phone, jaddress, address, flag, defaultFlag, addressId);
+	}
+	
+	/**
+	 * 取DefaultFlag的值
+	 */
+	function getDefaultFlag(){
+		if($("#swith").hasClass("switch_on")){
+			return 1;
+		} else{
+			return 0;
+		}
+	}
+	
+	function getFlag(){
+		var items =$("#other ul li");
+		for(var i=0;i<items.length;i++){
+			if($(items[i]).hasClass("activeli")){
+				return ($(items[i]).text());
+			}
+		}
+	}
+</script>
+</body>
+</html>

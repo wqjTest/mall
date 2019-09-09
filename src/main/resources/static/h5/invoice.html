@@ -1,0 +1,79 @@
+<!doctype html>
+<html class="no-js" lang="zh-Hans">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
+    <meta name="application-name" content="开具发票">
+    <title>开具发票</title>
+    <link rel="stylesheet" href="../css/normalize.css">
+    <link rel="stylesheet" href="../css/main.css">
+    <script src="../js/vue.js"></script>
+    <script src="../js/axios.min.js"></script>
+    <style>
+        html, body {
+            background-color: #f6f6f6;
+        }
+        .back-btn {
+            background-image: url("../img/back-orange.svg");
+        }
+        header {
+            border-bottom: 1px solid #e6e6e6;
+            background-color: white;
+        }
+        ul {
+            background-color: white;
+            padding: 0;
+            margin: .2rem 0 0;
+        }
+        li {
+            list-style: none;
+            padding: 0 .7rem;
+            border-bottom: .3rem solid #f6f6f6;
+
+        }
+        li > span {
+            font-size: 1rem;
+            color: #6c6c6c;
+            line-height: 2.8rem;
+        }
+        li > a {
+            width: .5rem;
+            height: .9rem;
+            background-image: url("../img/back-gray.svg");
+            background-size: cover;
+            float: right;
+            position: relative;
+            top: 1rem;
+            right: .2rem;
+        }
+    </style>
+</head>
+
+<body>
+<div class="top-space-low"></div>
+<header>
+    <div class="top">
+        <h1 class="head-title">开具发票</h1>
+        <a class="back-btn" href="javascript:void(0)" onClick="javascript :history.back(-1);"></a>
+    </div>
+</header>
+<section>
+    <ul>
+        <li onclick="window.open('/mall/h5/shoppingOpen.html','_self')">
+            <span>我要开票</span>
+            <a href="#"></a>
+        </li>
+        <li onclick="window.open('/mall/h5/invoiceHistory.html','_self')">
+            <span>开票历史</span>
+            <a href="#"></a>
+        </li>
+        <li onclick="window.open('#','_self')">
+            <span>发票帮助</span>
+            <a href="#"></a>
+        </li>
+    </ul>
+</section>
+<script src="http://upcdn.b0.upaiyun.com/libs/jquery/jquery-2.0.2.min.js"></script>
+<script src="../js/plugins.js"></script>
+</body>
+</html>

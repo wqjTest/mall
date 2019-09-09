@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.atongmu.mall.mall.dao.MallCommodityTypeDao">
+
+    <select id="listCommodityType"
+            parameterType="com.atongmu.mall.mall.entity.MallCommodityType"
+            resultType="com.atongmu.mall.mall.entity.MallCommodityType">
+        SELECT
+        id AS "id",
+        type_name AS "typeName",
+        type_sort AS "typeSort"
+        FROM
+        mall_commodity_type
+        <if test="typeSort != null">
+            LIMIT #{typeSort}
+        </if>
+    </select>
+
+    <select id="getCommodityTypeName"
+            parameterType="java.lang.String"
+            resultType="java.lang.String">
+        SELECT
+        type_name
+        FROM
+        mall_commodity_type
+        WHERE
+        id = #{id}
+    </select>
+
+</mapper>

@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<link rel="stylesheet" type="text/css" href="../css/all.css"/>
+	    	<script src="../js/jquery-3.3.1.min.js" type="text/javascript" charset="utf-8"></script>
+	    	<script src="../js/get.js" type="text/javascript" charset="utf-8"></script>
+		    <script src="../js/vue.js"></script>
+    		<script src="../js/axios.min.js"></script>
+		<title>我的订单</title>
+	</head>
+	<body>
+		<div id="main">
+			<div class="div_position">
+				<div id="head" class="main_head1 main_head title_center">
+						<button type="button" class="back_button1 title_left left" onclick="window.open('my.html','_self')"></button>
+			                        我的订单
+						<button disabled type="button" class="search_button title_rigth right" onclick="window.open('search.html')"></button>
+				</div>
+				<ul class="choose">
+					<li :class="{checked : isActive0}" @click="showOrders(0)">全部</li>
+					<li :class="{checked : isActive1}" @click="showOrders(1)">待付款</li>
+					<li :class="{checked : isActive2}" @click="showOrders(2)">待发货</li>
+					<li :class="{checked : isActive3}" @click="showOrders(3)">待收货</li>
+					<li :class="{checked : isActive4}" @click="showOrders(4)">待评价</li>
+				</ul>
+				<div id="space"></div>
+			</div>
+
+	    <div id="chance1" class="waitingfor_main waitingfor_main_postion" v-if="isActive0">
+		 	<div id="chance1-1" v-if="payedList.length != 0">
+		 		<div class="waiting_title">
+				 买家已付款
+		 	    </div>
+		 		<ul>
+			 		<li v-for="item in payedList" @click="showdetail(item.orderId)">
+			 			<img :src="item.goodsImg"/>
+			 			<div  class="waiiting_goodsname">{{item.goodsName}}
+			 			</div>
+			 			<div  class="goods_priceandqty">
+			 				<label>￥{{item.price}}</label>
+			 				<br />
+							 <label>x{{item.num}}</label>
+			 			</div>	 		
+			 	    </li>
+		 	    </ul>
+                 <script type="text/javascript">
+                 	$("#chance1-1 ul li").click(function(){
+                 		window.location.href="orderinfo-payed.html"
+                 	})
+                 </script>
+		 	    <div  class="waiting_count">
+		 	    	共<span>{{payedList.length}}</span>件商品
+		 	    	合计：<label>￥{{prices(payedList)|numFilter}}</label>
+		 	    </div>
+		 	    <!-- 
+		 	    <div class="waiting_footer">
+		 	    	<div class="payagain" style="margin-left: calc(100% - 9rem);">
+		 	    		<input type="button" name="againbtn" id="againbtn" value="更多" class="waiting_button waiting_button1" />
+		 	    		<div class="tip-bubble" >
+                     <div >
+                                             再来一单
+                     </div>
+                    </div>
+		 	    	</div>
+		 	    	<div  style="width: 5rem; float: right;">
+		 	    	<input type="button" name="" id="" value="查看物流" class="radius waiting_button waiting_button3"
+		 	    	onclick="window.open('orderinfo-deliverInfo.html','_self')" />
+		 	    	</div>		 	        
+		 	    </div>
+		 	     -->
+		 	</div>
+		 	<div id="chance1-2" v-if="unpayedList.length != 0">
+		 		<div class="waiting_title">
+		 		等待买家付款
+		 	    </div>
+		 	    <template v-for="item in unpayedList" >
+		 		<ul >
+			 		<li @click="showdetail(item.orderId)">
+			 			<img :src="item.goodsImg"/>
+			 			<div  class="waiiting_goodsname">{{item.goodsName}}
+			 			</div>
+			 			<div  class="goods_priceandqty">
+			 				<label>￥{{item.price}}</label>
+			 				<br />
+			 				<label>x{{item.num}}</label>
+			 			</div>	 		
+			 	    </li>
+		 	    </ul>
+                 <script type="text/javascript">
+                 	$("#chance1-2 ul li").click(function(){
+                 		window.location.href="orderinfo-waitpay.html"
+                 	})
+                 </script>
+                 <div  class="waiting_count">
+		 	    	共<span>{{item.num}}</span>件商品
+		 	    	合计：<label>￥{{(item.price * item.num)|numFilter}}</label>
+		 	    </div>
+		 	    <div class="waiting_footer">
+		 	    	<!-- 
+		 	    	<div class="payagain">
+		 	    		<input type="button" name="againbtn" id="againbtn" value="更多" class="waiting_button waiting_button1" />
+		 	    		<div class="tip-bubble" >
+                     <div >
+                                             再来一单
+                     </div>
+                    </div>
+		 	    	</div>
+		 	    	 -->
+		 	    	<div  style="width: 8.88rem; float: right;">
+		 	    	<input type="button" name="" id="" value="删除订单" class=" radius waiting_button waiting_button2" @click="deleteOrder(item.orderId)"/>
+		 	    	<input type="button" name="" id="" value="付款" class="radius waiting_button waiting_button3"
+		 	    	 onclick="window.open('firmOrder.html','_self')" />
+		 	    	</div>		 	        
+		 	    </div>
+		 	    </template>
+		 	</div>
+		</div>
+		
+		 <div id="chance2" class="waitingfor_main waitingfor_main_postion" v-if="isActive1">
+		 	<div class="waiting_title">
+		 		等待买家付款
+		 	</div>
+		 		<template v-if="orders.length != 0">
+		 			<template v-for="item in orders">
+				 		<ul>
+					 		<li @click="showdetail(item.orderId)">
+					 			<img :src="item.goodsImg"/>
+					 			<div  class="waiiting_goodsname">{{item.goodsName}}
+					 			</div>
+					 			<div  class="goods_priceandqty">
+					 				<label>￥{{item.price}}</label>
+					 				<br />
+					 				<label>x{{item.num}}</label>
+					 			</div>	 		
+					 	    </li>
+				 	    </ul>
+		                 <script type="text/javascript">
+		                 	$("#chance2 ul li").click(function(){
+		                 		window.location.href="orderinfo-waitpay.html"
+		                 	})
+		                 </script>
+				 	    <div class="waiting_count">
+				 	    	共<span>{{item.num}}</span>件商品
+				 	    	合计：<label>￥{{(item.price * item.num)|numFilter}}</label>
+				 	    </div>
+				 	    <div class="waiting_footer">
+				 	    	<!-- 
+				 	    	<div class="payagain">
+				 	    		<input type="button" name="againbtn" id="againbtn" value="更多" class="waiting_button waiting_button1" />
+				 	    		<div class="tip-bubble" >
+		                     <div >
+		                                             再来一单
+		                     </div>
+		                    </div>
+				 	    	</div>
+				 	    	 -->
+				 	    	<div id="" style="width: 8.88rem; float: right;">
+				 	    	<input type="button" name="" id="" value="删除订单" class=" radius waiting_button waiting_button2" @click="deleteOrder(item.orderId)"/>
+				 	    	<input type="button" name="" id="" value="付款" class="radius waiting_button waiting_button3"
+				 	    	  @click="toPay(item.orderId)"/>
+				 	    	</div>
+				 	    </div>
+		 	    	</template>
+		 	    </template>
+		   </div>
+		    <div id="chance3"  class="waitingfor_main waitingfor_main_postion" v-if="isActive2" >
+		 	<div class="waiting_title">
+		 		买家已付款
+		 	</div>
+		 		<ul>
+			 		<li v-for="item in orders" @click="showdetail(item.orderId)">
+			 			<img :src="item.goodsImg"/>
+			 			<div id="img_name" class="waiiting_goodsname">{{item.goodsName}}
+			 			</div>
+			 			<div id="img_price" class="goods_priceandqty">
+			 				<label>￥{{item.price}}</label>
+			 				<br />
+			 				<label>x{{item.num}}</label>
+			 			</div>	 		
+			 	    </li>
+		 	    </ul>
+                 <script type="text/javascript">
+                 	$("#chance3 ul li").click(function(){
+                 		window.location.href="orderinfo-payed.html"
+                 	})
+                 </script>
+		 	    <div class="waiting_count">
+		 	    	共<span>{{payedList.length}}</span>件商品
+		 	    	合计：<label>￥{{prices(payedList)|numFilter}}</label>
+		 	    </div>
+		 	    <div class="waiting_footer">
+		 	    	<!-- 
+		 	    	<div class="payagain" style="margin-left: calc(100% - 9rem);">
+		 	    		<input type="button" name="againbtn" id="againbtn" value="更多" class="waiting_button waiting_button1" />
+		 	    		<div class="tip-bubble" >
+                     <div >
+                                             再来一单
+                     </div>
+                    </div>
+		 	    	</div>
+		 	    	 -->
+		 	    	<div id="" style="width: 5rem; float: right;">
+		 	    	<!--<input type="button" name="" id="" value="删除订单" class=" radius waiting_button waiting_button2" />
+		 	    	<input type="button" name="" id="" value="查看物流" class="radius waiting_button waiting_button3"
+		 	    		onclick="window.open('orderinfo-deliverInfo.html','_self')"  />
+		 	    		-->
+		 	    	</div>		 	        
+		 	    </div>
+		   </div>
+		    <div id="chance4"  class="waitingfor_main waitingfor_main_postion" v-if="isActive3">
+		 	<div class="waiting_title">
+		 		卖家已发货
+		 	</div>
+		 		<ul>
+			 		<li  v-for="item in orders" @click="showdetail(item.orderId)">
+			 			<img :src="item.goodsImg"/>
+			 			<div id="img_name" class="waiiting_goodsname">{{item.goodsName}}
+			 			</div>
+			 			<div id="img_price" class="goods_priceandqty">
+			 				<label>￥{{item.price}}</label>
+			 				<br />
+			 				<label>x{{item.num}}</label>
+			 			</div>	 		
+			 	    </li>
+		 	    </ul>
+                 <script type="text/javascript">
+                 	$("#chance4 ul li").click(function(){
+                 		window.location.href="orderinfo-delivered.html"
+                 	})
+                 </script>
+		 	    <div  class="waiting_count">
+		 	    	共<span>{{payedList.length}}</span>件商品
+		 	    	合计：<label>￥{{prices(payedList)|numFilter}}</label>
+		 	    </div>
+		 	    <div class="waiting_footer">
+		 	    	<!-- 
+		 	    	<div class="payagain" style="margin-left: calc(100% - 9rem);">
+		 	    		<input type="button" name="againbtn" id="againbtn" value="更多" class="waiting_button waiting_button1" />
+		 	    		<div class="tip-bubble" >
+                     <div >
+                                             再来一单
+                     </div>
+                    </div>
+		 	    	</div>
+		 	    	-->
+		 	    	<div id="" style="width: 5rem; float: right;">
+		 	    	<!--<input type="button" name="" id="" value="删除订单" class=" radius waiting_button waiting_button2" />
+		 	    	<input type="button" name="" id="" value="查看物流" class="radius waiting_button waiting_button3"
+		 	    		onclick="window.open('orderinfo-deliverInfo.html','_self')"  />-->	 
+		 	    	</div>	
+		 	    		        
+		 	    </div>
+		   </div> 
+		   <div id="chance5"  class="waitingfor_main waitingfor_main_postion" v-if="isActive4">
+		 	<div class="waiting_title">
+		 		交易成功
+		 	</div>
+		 		<ul>
+			 		<li v-for="item in orders" @click="showdetail(item.orderId)">
+			 			<img :src="item.goodsImg"/>
+			 			<div id="img_name" class="waiiting_goodsname">{{item.goodsName}}
+			 			</div>
+			 			<div id="img_price" class="goods_priceandqty">
+			 				<label>￥{{item.price}}</label>
+			 				<br />
+			 				<label>x{{item.num}}</label>
+			 			</div>	 		
+			 	    </li>
+		 	    </ul>
+                 <script type="text/javascript">
+                 	$("#chance5 ul li").click(function(){
+                 		window.location.href="orderinfo-sucess.html"
+                 	})
+                 </script>
+		 	    <div  class="waiting_count">
+		 	    	共<span>{{payedList.length}}</span>件商品
+		 	    	合计：<label>￥{{prices(payedList)|numFilter}}</label>
+		 	    </div>
+		 	    <div class="waiting_footer">
+		 	    	<!-- 
+		 	    	<div class="payagain">
+		 	    		<input type="button" name="againbtn" id="againbtn" value="更多" class="waiting_button waiting_button1" />
+		 	    		<div class="tip-bubble" >
+                     <div >
+                                             再来一单
+                     </div>
+                    </div>
+		 	    	</div>
+		 	    	 
+		 	    	<div id="" style="width: 8.88rem; float: right;">
+		 	    	<input type="button" name="" id="" value="删除订单" class=" radius waiting_button waiting_button2" />
+		 	    	<input type="button" name="" id="" value="评价" class="radius waiting_button waiting_button3"
+		 	    	onclick="window.open('my-evaluate.html','_self')"  />
+		 	    	</div>
+		 	    	-->
+		 	    </div>
+		   </div> 
+		</div>
+		<script>
+			var app = new Vue({
+				el: '#main',
+				data: {
+					chancenum : $.Request("chancenum"),
+					userId	  : localStorage.getItem("userId"),
+					orders	  : [],
+					
+				},
+				computed : {
+					isActive0 : function(){
+						return (this.getNum() == 0);
+					},
+					isActive1 : function(){
+						return (this.getNum() == 1);
+					},
+					isActive2 : function(){
+						return (this.getNum() == 2);
+					},
+					isActive3 : function(){
+						return (this.getNum() == 3);
+					},
+					isActive4 : function(){
+						return (this.getNum() == 4);
+					},
+					
+					unpayedList: function(){
+						return this.orders.filter(function(e){
+							return e.status == 0;
+						})
+					},
+					
+					payedList: function(){
+						return this.orders.filter(function(e){
+							return e.status != 0;
+						})
+					},
+				},
+				methods: {
+					getNum: function() {
+		                return this.chancenum;
+		            },
+		            showOrders: function(chancenum){
+		            	_this = this;
+		            	_this.chancenum = chancenum;
+		            	var _status;
+		            	if (_this.chancenum == 0){
+		            		_status = '0,1,2,3';
+		            	} else{
+		            		_status = _this.chancenum - 1;
+		            	}
+		            	axios.get('/mall/orders/' + _this.userId + "/find?status=" + _status)
+						.then(function(response){
+							_this.orders = response.data.data;
+						})
+						.catch(function (error) {
+						    console.log(error);
+						});
+		            },
+		            prices: function(_list){
+		            	var cost = 0;
+		            	_list.forEach(item => {
+		            		cost += item.price * item.num;
+		            	})
+		            	return cost;
+		            },
+		            showdetail(orderId){
+		            	window.location.href="orderinfo.html?orderid=" + orderId;
+		            },
+		            deleteOrder(orderId){
+		            	_this = this;
+		            	axios.get('/mall/orders/' + _this.userId + "/delete/" + orderId)
+						.then(function(response){
+							_this.showOrders(_this.chancenum);
+							
+						})
+						.catch(function (error) {
+						    console.log(error);
+						});
+		            },
+		            toPay: function(orderId, totalAmt){
+		            	window.location.href="firmOrder.html?orderid=" + orderId;
+		            }
+				},
+				filters:{
+					numFilter(value){
+						 return parseFloat(value).toFixed(2);
+					}
+				},
+				mounted: function(){
+					this.showOrders(this.chancenum);
+				},
+			});
+		</script>
+	</body>
+</html>

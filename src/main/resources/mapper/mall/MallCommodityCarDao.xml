@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.atongmu.mall.mall.dao.MallCommodityCarDao">
+
+    <select id="listCommodityByCarIds"
+            parameterType="java.util.List"
+            resultType="com.atongmu.mall.mall.entity.MallCommodity">
+        SELECT
+        c.id AS "id",
+        a.remarks AS "remarks",
+        a.commodity_name AS "commodityName",
+        a.commodity_price AS "commodityPrice",
+        a.discount AS "discount",
+        a.price AS "price",
+        a.commodity_image AS "commodityImage",
+        a.commodity_type AS "commodityType",
+        a.status AS "status",
+        c.number AS "saleNum"
+        FROM
+        mall_commodity_car c
+        LEFT JOIN mall_commodity a ON c.commodity_id = a.id
+        <where>
+            c.id IN
+            <foreach collection="list" separator="," open="(" close=")" item="item">
+                #{item}
+            </foreach>
+        </where>
+    </select>
+
+    <select id="getCommodityCar"
+            resultType="com.atongmu.mall.mall.entity.MallCommodityCar">
+        SELECT
+        id AS "id",
+        user_id AS "userId",
+        commodity_id AS "commodityId",
+        commodity_image AS "commodityImage",
+        commodity_name AS "commodityName",
+        commodity_price AS "commodityPrice",
+        price AS "price",
+        number AS "number"
+        FROM
+        mall_commodity_car
+        WHERE
+        1 = 1
+        AND id = #{id}
+    </select>
+
+    <select id="listMallCarByUserId"
+            resultType="com.atongmu.mall.mall.entity.MallCommodityCar">
+        SELECT
+        id AS "id",
+        user_id AS "userId",
+        commodity_id AS "commodityId",
+        commodity_image AS "commodityImage",
+        commodity_name AS "commodityName",
+        commodity_price AS "commodityPrice",
+        price AS "price",
+        number AS "number"
+        FROM
+        mall_commodity_car
+        WHERE
+        1 = 1
+        AND user_id = #{userId}
+    </select>
+
+    <select id="listMallCarByCommodityAndUserId"
+            parameterType="com.atongmu.mall.mall.entity.MallCommodityCar"
+            resultType="com.atongmu.mall.mall.entity.MallCommodityCar">
+        SELECT
+        id AS "id",
+        number AS "number"
+        FROM
+        mall_commodity_car
+        WHERE
+        1 = 1
+        AND user_id = #{userId}
+        AND commodity_id = #{commodityId}
+    </select>
+
+    <insert id="save"
+            parameterType="com.atongmu.mall.mall.entity.MallCommodityCar">
+        INSERT INTO mall_commodity_car(
+        id,
+        create_by,
+        create_date,
+        update_by,
+        update_date,
+        remarks,
+        del_flag,
+        user_id,
+        commodity_id,
+        commodity_image,
+        commodity_name,
+        commodity_price,
+        price,
+        number
+        ) VALUES (
+        #{id},
+        #{createBy},
+        #{createDate},
+        #{updateBy},
+        #{updateDate},
+        #{remarks},
+        #{delFlag},
+        #{userId},
+        #{commodityId},
+        #{commodityImage},
+        #{commodityName},
+        #{commodityPrice},
+        #{price},
+        #{number}
+        )
+    </insert>
+
+    <update id="updateMallCommodityCar"
+            parameterType="com.atongmu.mall.mall.entity.MallCommodityCar">
+        UPDATE mall_commodity_car SET
+        update_date = #{updateDate},
+        commodity_price = #{commodityPrice},
+        price = #{price},
+        number = #{number}
+        WHERE
+        id = #{id}
+    </update>
+
+    <update id="delete">
+        DELETE FROM mall_commodity_car
+        WHERE id = #{id}
+    </update>
+
+    <update id="deleteByUserId"
+            parameterType="com.atongmu.mall.mall.entity.MallCommodityCar">
+        DELETE
+        FROM
+        mall_commodity_car
+        WHERE
+        user_id = #{userId},
+        commodity_id = #{commodityId}
+    </update>
+
+</mapper>

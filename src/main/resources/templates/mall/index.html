@@ -1,0 +1,165 @@
+<!doctype html>
+<html class="no-js" lang="zh-Hans" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
+    <meta name="application-name" content="商城首页">
+    <title>商城首页</title>
+    <link rel="stylesheet" th:href="@{/css/normalize.css}">
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" th:href="@{/css/swiper.css}">
+</head>
+
+<body>
+<header id="header">
+    <div class=" home-top">
+        <!--<input id="search-input" onclick="window.open('search.html')" type="button" value="提示语...">-->
+        <!--<a  class="right-btn" href="customerService.html"></a>-->
+    </div>
+</header>
+<section>
+    <div class="swiper-container swiper-container-v">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide banner-img" th:each="recommend:${listRecommend}">
+                <img th:src="${recommend.imageUrl}">
+            </div>
+        </div>
+        <div class="swiper-pagination swiper-pagination-v"></div>
+    </div>
+    <div class="option-bar">
+        <a th:each="commodityType:${listType}"
+           th:href="'javascript:typeJump(\'' + ${commodityType.id} + '\')'"
+           id="skirt" hidefocus="true">
+           <p th:text="${commodityType.typeName}"></p>
+        </a>
+    </div>
+    <div class="space"></div>
+    <div class="swiper-container swiper-container-x">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <div class=" ad">
+                    <img th:src="@{/img/banner-box-2.png}">
+                </div>
+            </div>
+        </div>
+    </div>
+    <span class="today-news shop-li-title">今日上新</span>
+
+    <div class="shop-li-news">
+    </div>
+
+    <!--<div class="home-piece">
+        <span class="piece-vip shop-li-title">拼单专享</span>
+        <ul>
+            <li onclick="window.open('details-pdd.html','_self')" class="piece-li">
+                <img th:src="@{/img/goods-1.png}">
+                <h6>微型迷你拼接小颗粒拼装积木拼插钻石益312312312312312312智玩具兼容乐高成人马里奥</h6>
+                <span class="price-number">18.60</span>
+                <p class="chakan">0</p><p class="fukuai-num">2人付款</p>
+            </li>
+            <div class="space"></div>
+        </ul>
+    </div>-->
+</section>
+
+<footer>
+    <div class="bottom-space"></div>
+    <div class="bottom-bar">
+        <a href="javascript:indexJump(0)" class="home this-home this-page" hidefocus="true"><p>首页</p></a>
+        <a href="javascript:indexJump(1)" class="classify" hidefocus="true"><p>分类</p></a>
+        <!--<a href="integral.html" class="gold" hidefocus="true"><p>积分专区</p></a>-->
+        <a href="javascript:indexJump(3)" class="shopping" hidefocus="true"><p>购物车</p></a>
+        <a href="javascript:indexJump(4)" class="my" hidefocus="true"><p>我的</p></a>
+    </div>
+</footer>
+
+<script th:src="@{/js/swiper.js}"></script>
+<script th:src="@{http://upcdn.b0.upaiyun.com/libs/jquery/jquery-2.0.2.min.js}"></script>
+<script th:src="@{/js/plugins.js}"></script>
+<script th:src="@{/js/main.js}"></script>
+<script th:inline="javascript">
+    $(document).ready(function () {
+        var userId = [[${userId}]];
+        localStorage.setItem("userId", userId);
+        fillData();
+        var pic_height = parseInt( $('.home-goods').find(".pic").width());
+        $('.home-goods').find(".pic").css({"height":(pic_height*3)/4+"px"});
+    });
+    function fillData(){
+        var html =
+            "<div onclick='commodityContent(\"COMMODITY_ID\")' class='home-goods goods-left'>" +
+                    "<div class='pic'>"+
+            "<img src='COMMODITY_IMG'>" +
+            "</div>" +
+            "<h6 class='goods-title'>" + "COMMODITY_NAME" +
+            "</h6>" +
+            "<div class='price'>" +
+            "<span class='price-number'>PRICE</span>" +
+            "<p class='chakan'>WATCH_NUM</p><p class='fukuai-num'>PAY_NUM</p>" +
+            "</div>" +
+            "</div>";
+        var innerHtml = "";
+        $.ajax({
+            type: "POST",
+            url: [[@{/commodity/listCommodityOfIndex}]],
+            data: JSON.stringify(
+                {"userId": localStorage.getItem("userId")}
+            ),
+            dataType: "json",
+            contentType: "application/json",
+            success: function(data){
+                $(data.data).each(function(i, n){
+                    innerHtml += html.replace("COMMODITY_ID", n.id)
+                        .replace("COMMODITY_IMG", n.commodityImage)
+                        .replace("COMMODITY_NAME", n.commodityName)
+                        .replace("PRICE", n.price)
+                        .replace("WATCH_NUM", "0")
+                        .replace("PAY_NUM", "0");
+                });
+                $(".shop-li-news").html(innerHtml);
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown){}
+        });
+    }
+    function indexJump(number) {
+        var userId = localStorage.getItem("userId");
+        switch (number){
+            case 0:
+                window.location.href = "/mall/home/index?userId=" + userId;//index.html
+                break;
+            case 1:
+                window.location.href = "/mall/commodity/listCommodityType";//classify.html
+                break;
+            case 2:
+                window.location.href = "" + userId;//integral.html
+                break;
+            case 3:
+                window.location.href = "/mall/mallCar/viewMallCar/" + userId;//shopping.html
+                break;
+            case 4:
+                window.location.href = "/mall/h5/my.html";//my.html http://localhost:10020/mall/h5/my.html
+                break;
+            default:
+                window.location.href = "" + userId;
+                break;
+        }
+    }
+
+    function typeJump(thisIndex) {
+        var userId = localStorage.getItem("userId");
+        window.location.href = "/mall/commodity/listCommodityByType?userId="
+            + userId + "&commodityType=" + thisIndex;//my.html
+    }
+
+    var numFoot=$('.bottom-bar').find("a").length;
+    if( numFoot==1){$('.bottom-bar').find("a").css({"width":"100%"});}
+    else if( numFoot==2){$('.bottom-bar').find("a").css({"width":"50%"});}
+    else if( numFoot==3){$('.bottom-bar').find("a").css({"width":"33.3%"});}
+    else if( numFoot==4){$('.bottom-bar').find("a").css({"width":"25%"});}
+    else if( numFoot==5){$('.bottom-bar').find("a").css({"width":"20%"});}
+
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.atongmu.mall.mall.dao.MallOrderInvoiceDetailDao">
+
+    <select id="listInvoiceDetail"
+            resultType="com.atongmu.mall.mall.entity.MallOrderInvoiceDetail">
+        SELECT
+        order_id
+        FROM
+        mall_order_invoice_detail
+        WHERE
+        invoice_id = #{invoiceId}
+    </select>
+
+    <insert id="save"
+            useGeneratedKeys="true"
+            parameterType="com.atongmu.mall.mall.entity.MallOrderInvoiceDetail">
+        INSERT INTO mall_order_invoice_detail (
+         order_id,
+         invoice_id
+        ) VALUES (
+        #{orderId},
+        #{invoiceId}
+        )
+    </insert>
+
+</mapper>

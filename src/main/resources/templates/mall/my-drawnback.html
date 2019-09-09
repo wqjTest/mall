@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="css/all.css"/>
+		<script type="text/javascript" src="js/jquery-3.3.1.min.js" ></script>
+	</head>
+	<script type="text/javascript">
+	$(function(){
+		$(".drwanback_R").attr('data-attr','请选择')
+	})
+		
+	</script>
+	<body>
+		<div id="main">
+			<div class="main_head title_center main_head_positive main_head1">
+			<button type="button" class="back_button1 title_left left" onclick="javaScript:history.back(-1)"></button>
+		            申请退款
+		    <span class="title_rigth right"></span>
+			</div>
+			<div id="drawnback_content" class="main_content">
+				<ul>
+					<li>
+						<img src="img/skirt1.png"/>
+						<div id="">
+							画画工具儿童绘画套装画笔礼盒水彩小幼美术生学习用品生日礼物
+						</div>
+					</li>
+				</ul>
+				<div id=""style="background-color: #e6e6e6; width: 100%; height: 0.31rem;"></div>
+				<div id="resonance">
+					<ul>
+						<li class="drwanback_R">退款原因</li>
+						<li>退款金额：<label class="drawn_backPrice">299.00</label></li>
+						<li class="drawnback_other">最多￥1.65，含发货邮费</li>
+						<li>退款说明：
+						<input type="text" name="instruction" id="instruction" value="" placeholder="选填" />
+						</li>
+					</ul>
+					<div id=""style="background-color: #e6e6e6; width: 100%; height: 0.31rem;"></div>
+				</div>
+			</div>
+			<input class="drawnback_reson_input" type="button" name="" id="" value="提交" onclick="window.open('my-drawnbackinfo.html','_self')" />
+		<!--
+        	作者：offline
+        	时间：2018-12-11
+        	描述：退款原因选择
+        -->
+        <div id="drawnback_reson">
+        	<div id="drawnback_resoninfo">
+        		<p>退款原因</p>
+        		<ul>
+        			<li>
+        				拍错/多拍/不想要
+        				<img src="imgs/icon/no.png"/>
+        			</li>
+        			<li>
+        				协商一致退款
+        				<img src="imgs/icon/no.png"/>
+        			</li>
+        			<li>
+        				缺货
+        				<img src="imgs/icon/no.png"/>
+        			</li>
+        			<li>
+        				其他
+        				<img src="imgs/icon/no.png"/>
+        			</li>
+        		</ul>
+        	</div>
+            <input class="drawnback_reson_input" type="button" name="" id="" value="确定" onclick="checkedReson()" />
+        </div>
+		</div>
+		<script type="text/javascript">
+         var index;
+         var Array1=[
+	    	'拍错/多拍/不想要',
+	    	'协商一致退款',
+	    	'缺货',
+	    	'其他'
+    	]
+		$("#drawnback_resoninfo ul li ").click(function(){			
+			var itemimgs=$("#drawnback_resoninfo ul li")
+			var _this=$(this).children().eq(0);
+			for(var i=0;i<itemimgs.length;i++){
+				if(i==itemimgs.index(this))
+				{
+					var src =$(_this).attr("src").replace("no","yes")
+					$(_this).attr('src',src)
+				}
+				else{
+					var realsrc=$(itemimgs[i]).children().eq(0).attr('src')
+					if(realsrc.indexOf('yes')>0)
+					{
+						var src =realsrc.replace("yes","no")
+					    $(itemimgs[i]).children().eq(0).attr('src',src)
+					}
+				}
+			}
+			index = itemimgs.index(this)
+//				alert(itemimgs.index(this))
+		})
+		    //原因选择
+		    $(".drwanback_R").click(function(){
+		    	$("	#drawnback_reson").css('display','block')
+		    })
+		    //已选择原因
+		    function checkedReson(){
+		    	var result =Array1[index]
+		    	$(".drwanback_R").attr('data-attr',result)
+		    	console.log(index)
+		    	$("#drawnback_reson").css('display','none')
+		    }
+		</script>
+	</body>
+</html>

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.atongmu.mall.mall.dao.MallOrderInvoiceDao">
+
+    <sql id="mallOrderInvoiceColumns">
+        a.id AS "id",
+        a.create_by AS "createBy",
+        a.create_date AS "createDate",
+        a.update_by AS "updateBy",
+        a.update_date AS "updateDate",
+        a.remarks AS "remarks",
+        a.del_flag AS "delFlag",
+        a.person_id AS "personId",
+        a.invoice_type AS "invoiceType",
+        a.invoice_title AS "invoiceTitle",
+        a.invoice_name AS "invoiceName",
+        a.identification_number AS "identificationNumber",
+        a.invoice_content AS "invoiceContent",
+        a.invoice_amount AS "invoiceAmount",
+        a.invoice_address AS "invoiceAddress",
+        a.invoice_recipient AS "invoiceRecipient",
+        a.invoice_phone AS "invoicePhone",
+        a.invoice_email AS "invoiceEmail",
+        a.invoice_flag AS "invoiceFlag"
+    </sql>
+
+    <select id="getOrderInvoice"
+            resultType="com.atongmu.mall.mall.entity.MallOrderInvoice">
+        SELECT
+        <include refid="mallOrderInvoiceColumns"/>
+        FROM mall_order_invoice a
+        WHERE a.id = #{id}
+    </select>
+
+    <select id="listOrderInvoice"
+            resultType="com.atongmu.mall.mall.entity.MallOrderInvoice">
+        SELECT
+        <include refid="mallOrderInvoiceColumns"/>
+        FROM mall_order_invoice a
+        <where>
+            a.del_flag = "0"
+            AND a.person_id = #{personId}
+        </where>
+    </select>
+
+    <insert id="save"
+            parameterType="com.atongmu.mall.mall.entity.MallOrderInvoice">
+        INSERT INTO mall_order_invoice(
+        id,
+        create_by,
+        create_date,
+        update_by,
+        update_date,
+        remarks,
+        del_flag,
+        person_id,
+        invoice_type,
+        invoice_title,
+        invoice_name,
+        identification_number,
+        invoice_content,
+        invoice_amount,
+        invoice_address,
+        invoice_recipient,
+        invoice_phone,
+        invoice_email,
+        invoice_flag
+        ) VALUES (
+        #{id},
+        #{createBy},
+        #{createDate},
+        #{updateBy},
+        #{updateDate},
+        #{remarks},
+        #{delFlag},
+        #{personId},
+        #{invoiceType},
+        #{invoiceTitle},
+        #{invoiceName},
+        #{identificationNumber},
+        #{invoiceContent},
+        #{invoiceAmount},
+        #{invoiceAddress},
+        #{invoiceRecipient},
+        #{invoicePhone},
+        #{invoiceEmail},
+        #{invoiceFlag}
+        )
+    </insert>
+
+    <update id="update"
+            parameterType="com.atongmu.mall.mall.entity.MallOrderInvoice">
+        UPDATE mall_order_invoice SET
+        update_date = #{updateDate},
+        remarks = #{remarks},
+        person_id = #{personId},
+        invoice_type = #{invoiceType},
+        invoice_title = #{invoiceTitle},
+        invoice_name = #{invoiceName},
+        identification_number = #{identificationNumber},
+        invoice_content = #{invoiceContent},
+        invoice_amount = #{invoiceAmount},
+        invoice_address = #{invoiceAddress},
+        invoice_recipient = #{invoiceRecipient},
+        invoice_phone = #{invoicePhone},
+        invoice_email = #{invoiceEmail},
+        invoice_flag = #{invoiceFlag}
+        WHERE id = #{id}
+    </update>
+
+    <update id="delete">
+        UPDATE mall_order_invoice SET
+        del_flag = "1"
+        WHERE id = #{id}
+    </update>
+
+</mapper>

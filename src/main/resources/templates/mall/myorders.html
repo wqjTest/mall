@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="js/get.js" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/all.css}"/>
+	<script th:src="@{/js/jquery-3.3.1.min.js}" type="text/javascript" charset="utf-8"></script>
+	<title></title>
+	<script type="text/javascript">
+		$(document).ready(function(){
+		    $(".payagain").mouseover(function(){
+		        $(".tip-bubble").show("fast");
+		    });
+		    $(".payagain").mouseout(function(){
+		        $(".tip-bubble").hide("fast");
+		    });
+		});
+		$(function(){
+		    getNum();
+		});
+		function getNum(){
+		    var show = [[${chancenum}]];
+			var chance = $('ul li')
+				for(var i=0; i<chance.length;i++){
+					if(i==show){
+						$(chance[i]).addClass("checked");
+						var chances="#chance"+(i+1);
+						$(chances).removeClass("chance")
+					} else {
+						$(chance[i]).removeClass("checked")
+						var chances="#chance"+(i+1);
+						$(chances).addClass("chance")
+					}
+				}
+		}
+		</script>
+	</head>
+	<body>
+		<div id="main">
+			<div class="div_position">
+				<div id="head" class="main_head1 main_head title_center">
+					<button type="button" class="back_button1 title_left left" onclick="window.open('my.html','_self')">
+					</button>
+					我的订单
+					<button type="button" class="search_button title_rigth right" onclick="window.open('search.html')">
+					</button>
+		        </div>
+		        <ul class="choose">
+					<li class="checked">全部</li>
+					<li >待付款</li>
+					<li>待发货</li>
+					<li>待收货</li>
+					<li>待评价</li>
+				</ul>
+				<div id="space"></div>
+			</div>
+
+	    <div id="chance1" class="waitingfor_main waitingfor_main_postion">
+		 	<div id="chance1-1" th:if="${payedNum} > 0">
+		 		<div class="waiting_title">
+		 		买家已付款
+		 	    </div>
+		 		<ul th:each="entity:${payedList}">
+			 		<li th:attr="value=${entity.orderId}">
+			 			<img th:src="${entity.goodsImg}"/>
+			 			<div class="waiiting_goodsname" th:text="${entity.goodsName}">
+			 			</div>
+			 			<div class="goods_priceandqty">
+			 				<label>￥<span th:text="${entity.price}"/></label>
+			 				<br />
+			 				<label>x<span th:text="${entity.num}"/></label>
+			 			</div>
+			 	    </li>
+		 	    </ul>
+                 <script type="text/javascript">
+                 	$("#chance1-1 ul li").click(function(){
+                 		var userId = localStorage.getItem("userId");
+                 		var orderId = $(this).attr("value");
+                 		window.location.href="/mall/orders/" + userId + "/view/" + orderId;
+                 	})
+                 </script>
+		 	    <div  class="waiting_count">
+		 	    	共<span th:text="${payedNum}">1</span>件商品
+		 	    	合计：￥<label th:text="${payedTotal}">￥229.00</label>
+		 	    </div>
+		 	    <div class="waiting_footer">
+		 	    	<!-- 
+		 	    	<div class="payagain" style="margin-left: calc(100% - 9rem);">
+		 	    		<input type="button" name="againbtn" id="againbtn" value="更多" class="waiting_button waiting_button1" />
+		 	    		<div class="tip-bubble" >
+                     <div >
+                                             再来一单
+                     </div>
+                    </div>
+		 	    	</div>
+		 	    	<div  style="width: 5rem; float: right;">
+		 	    	<input type="button" name="" id="" value="查看物流" class="radius waiting_button waiting_button3"
+		 	    	onclick="window.open('orderinfo-deliverInfo.html','_self')" />
+		 	    	</div>
+		 	    	-->		 	        
+		 	    </div>
+		 	</div>
+		 	<div id="chance1-2" th:if="${unpayedNum} > 0">
+		 		<div class="waiting_title">
+		 		等待买家付款
+		 	    </div>
+		 		<ul th:each="entity:${unpayedList}">
+			 		<li th:attr="value=${entity.orderId}">
+			 			<img th:src="${entity.goodsImg}"/>
+			 			<div class="waiiting_goodsname" th:text="${entity.goodsName}"/>
+			 			<div class="goods_priceandqty">
+			 				<label>￥<span th:text="${entity.price}"/></label>
+			 				<br />
+			 				<label>x<span th:text="${entity.num}"/></label>
+			 			</div>
+			 	    </li>
+		 	    </ul>
+                 <script type="text/javascript">
+                 	$("#chance1-2 ul li").click(function(){
+                 		var userId = localStorage.getItem("userId");
+                 		var orderId = $(this).attr("value");
+                 		window.location.href="/mall/orders/" + userId + "/view/" + orderId;
+                 	})
+                 	
+                 </script>
+		 	    <div class="waiting_count">
+		 	    	共<span th:text="${unpayedNum}">1</span>件商品
+		 	    	合计：￥<label th:text="${unpayedTotal}">￥229.00</label>
+		 	    </div>
+		 	    <div class="waiting_footer">
+		 	    	<div class="payagain">
+		 	    		<input type="button" name="againbtn" id="againbtn" value="更多" class="waiting_button waiting_button1" />
+		 	    		<div class="tip-bubble" >
+                     <div >
+                                             再来一单
+                     </div>
+                    </div>
+		 	    	</div>
+		 	    	<div  style="width: 8.88rem; float: right;">
+		 	    	<input type="button" name="" id="" value="删除订单" class=" radius waiting_button waiting_button2" />
+		 	    	<input type="button" name="" id="" value="付款" class="radius waiting_button waiting_button3"
+		 	    	 onclick="window.open('firmOrder.html','_self')" />
+		 	    	</div>		 	        
+		 	    </div>
+		 	</div>
+		</div>
+		
+		 <div id="chance2"  class="waitingfor_main chance waitingfor_main_postion">
+		 	<div class="waiting_title">
+		 		等待买家付款
+		 	</div>
+		 		<ul th:each="entity:${unpayedList}">
+			 		<li th:attr="value=${entity.orderId}">
+			 			<img src="img/skirt1.png" th:src="${entity.goodsImg}"/>
+			 			<div  class="waiiting_goodsname" th:text="${entity.goodsName}">港味chic优雅气质露肩长袖修身T恤+系带高腰开叉长款半身裙2018秋
+			 			</div>
+			 			<div  class="goods_priceandqty">
+			 				￥<label th:text="${entity.price}">￥229.00</label>
+			 				<br />
+			 				<label>x<span th:text="${entity.num}"/></label>
+			 			</div>	 		
+			 	    </li>
+		 	    </ul>
+		 	    <!--
+                 	作者：offline
+                 	时间：2018-12-14
+                 	描述：进入订单详情--待付款
+                 -->
+                 <script type="text/javascript">
+                 	$("#chance2 ul li").click(function(){
+                 		var userId = localStorage.getItem("userId");
+                 		var orderId = $(this).attr("value");
+                 		window.location.href="/mall/orders/" + userId + "/view/" + orderId;
+                 	})
+                 </script>
+		 	    <div class="waiting_count">
+		 	    	共<span th:text="${unpayedNum}">1</span>件商品
+		 	    	合计：￥<label th:text="${unpayedTotal}">￥229.00</label>
+		 	    </div>
+		 	    <div class="waiting_footer">
+		 	    	<div class="payagain">
+		 	    		<input type="button" name="againbtn" id="againbtn" value="更多" class="waiting_button waiting_button1" />
+		 	    		<div class="tip-bubble" >
+                     <div >
+                                             再来一单
+                     </div>
+                    </div>
+		 	    	</div>
+		 	    	<div id="" style="width: 8.88rem; float: right;">
+		 	    	<input type="button" name="" id="" value="删除订单" class=" radius waiting_button waiting_button2" />
+		 	    	<input type="button" name="" id="" value="付款" class="radius waiting_button waiting_button3"
+		 	    	 onclick="window.open('firmOrder.html','_self')" />
+		 	    	</div>		 	        
+		 	    </div>
+		   </div>
+		    <div id="chance3"  class="waitingfor_main chance waitingfor_main_postion">
+		 	<div class="waiting_title">
+		 		买家已付款
+		 	</div>
+		 		<ul th:each="entity:${list2}">
+			 		<li th:attr="value=${entity.orderId}">
+			 			<img src="img/skirt1.png" th:src="${entity.goodsImg}"/>
+			 			<div id="img_name" class="waiiting_goodsname" th:text="${entity.goodsName}">港味chic优雅气质露肩长袖修身T恤+系带高腰开叉长款半身裙2018秋
+			 			</div>
+			 			<div  class="goods_priceandqty">
+			 				￥<label th:text="${entity.price}">￥229.00</label>
+			 				<br />
+			 				<label>x<span th:text="${entity.num}"/></label>
+			 			</div> 		
+			 	    </li>
+		 	    </ul>
+		 	      <!--
+                 	作者：offline
+                 	时间：2018-12-14
+                 	描述：进入订单详情--待发货
+                 -->
+                 <script type="text/javascript">
+                 	$("#chance3 ul li").click(function(){
+                 		var userId = localStorage.getItem("userId");
+                 		var orderId = $(this).attr("value");
+                 		window.location.href="/mall/orders/" + userId + "/view/" + orderId;
+                 	})
+                 </script>
+		 	    <div class="waiting_count">
+		 	    	共<span th:text="${num2}">1</span>件商品
+		 	    	合计：￥<label th:text="${total2}">￥229.00</label>
+		 	    </div>
+		 	    <div class="waiting_footer">
+		 	    	<div class="payagain" style="margin-left: calc(100% - 9rem);">
+		 	    		<input type="button" name="againbtn" id="againbtn" value="更多" class="waiting_button waiting_button1" />
+		 	    		<div class="tip-bubble" >
+                     <div >
+                                             再来一单
+                     </div>
+                    </div>
+		 	    	</div>
+		 	    	<div id="" style="width: 5rem; float: right;">
+		 	    	<!--<input type="button" name="" id="" value="删除订单" class=" radius waiting_button waiting_button2" />-->
+		 	    	<input type="button" name="" id="" value="查看物流" class="radius waiting_button waiting_button3"
+		 	    		onclick="window.open('orderinfo-deliverInfo.html','_self')"  />
+		 	    	</div>		 	        
+		 	    </div>
+		   </div>
+		    <div id="chance4"  class="waitingfor_main chance waitingfor_main_postion">
+		 	<div class="waiting_title">
+		 		卖家已发货
+		 	</div>
+		 		<ul th:each="entity:${list3}">
+			 		<li th:attr="value=${entity.orderId}">
+			 			<img src="img/skirt1.png" th:src="${entity.goodsImg}"/>
+			 			<div id="img_name" class="waiiting_goodsname" th:text="${entity.goodsName}">港味chic优雅气质露肩长袖修身T恤+系带高腰开叉长款半身裙2018秋
+			 			</div>
+			 			<div id="img_price" class="goods_priceandqty">
+			 				<label th:text="￥+${entity.price}">￥299</label>
+			 				<br />
+			 				<label th:text="x+${entity.num}">x1</label>
+			 			</div>	 		
+			 	    </li>
+		 	    </ul>
+		 	    <!--
+                 	作者：offline
+                 	时间：2018-12-14
+                 	描述：进入订单详情--待收货
+                 -->
+                 <script type="text/javascript">
+                 	$("#chance4 ul li").click(function(){
+                 		var userId = localStorage.getItem("userId");
+                 		var orderId = $(this).attr("value");
+                 		window.location.href="/mall/orders/" + userId + "/view/" + orderId;
+                 	})
+                 </script>
+		 	    <div  class="waiting_count">
+		 	    	共<span th:text="${num3}">1</span>件商品
+		 	    	合计：<label th:text="￥+${total3}">￥229.00</label>
+		 	    </div>
+		 	    <div class="waiting_footer">
+		 	    	<div class="payagain" style="margin-left: calc(100% - 9rem);">
+		 	    		<input type="button" name="againbtn" id="againbtn" value="更多" class="waiting_button waiting_button1" />
+		 	    		<div class="tip-bubble" >
+                     <div >
+                                             再来一单
+                     </div>
+                    </div>
+		 	    	</div>
+		 	    	<div id="" style="width: 5rem; float: right;">
+		 	    	<!--<input type="button" name="" id="" value="删除订单" class=" radius waiting_button waiting_button2" />-->
+		 	    	<input type="button" name="" id="" value="查看物流" class="radius waiting_button waiting_button3"
+		 	    		onclick="window.open('orderinfo-deliverInfo.html','_self')"  />
+		 	    	</div>		 	        
+		 	    </div>
+		   </div> 
+		   <div id="chance5"  class="waitingfor_main chance waitingfor_main_postion">
+		 	<div class="waiting_title">
+		 		交易成功
+		 	</div>
+		 		<ul th:each="entity:${list4}">
+			 		<li th:attr="value=${entity.orderId}">
+			 			<img src="img/skirt1.png" th:src="${entity.goodsImg}"/>
+			 			<div id="img_name" class="waiiting_goodsname" th:text="${entity.goodsName}">港味chic优雅气质露肩长袖修身T恤+系带高腰开叉长款半身裙2018秋
+			 			</div>
+			 			<div id="img_price" class="goods_priceandqty">
+			 				<label th:text="￥+${entity.price}">￥299</label>
+			 				<br />
+			 				<label th:text="x+${entity.num}">x1</label>
+			 			</div>
+			 	    </li>
+		 	    </ul>
+                 <script type="text/javascript">
+                 	$("#chance5 ul li").click(function(){
+                 		var userId = localStorage.getItem("userId");
+                 		var orderId = $(this).attr("value");
+                 		window.location.href="/mall/orders/" + userId + "/view/" + orderId;
+                 	})
+                 </script>
+		 	    <div  class="waiting_count">
+		 	    	共<span th:text="${num4}">1</span>件商品
+		 	    	合计：<label th:text="￥+${total4}">￥229.00</label>
+		 	    </div>
+		 	    <div class="waiting_footer">
+		 	    	<div class="payagain">
+		 	    		<input type="button" name="againbtn" id="againbtn" value="更多"
+							   class="waiting_button waiting_button1"/>
+		 	    		<div class="tip-bubble">
+                     <div >再来一单</div>
+                    </div>
+		 	    	</div>
+		 	    	<div style="width: 8.88rem; float: right;">
+		 	    	<input type="button" value="删除订单" class=" radius waiting_button waiting_button2"/>
+		 	    	<input type="button" value="评价" class="radius waiting_button waiting_button3"
+		 	    	onclick="window.open('my-evaluate.html','_self')"/>
+		 	    	</div>		 	        
+		 	    </div>
+		   </div>
+		</div>
+		<script>
+			$(".choose li").click(function(){
+				var chance = $('ul li');
+				for(var i = 0; i < chance.length; i++){
+					if(i==chance.index(this)){
+						$(this).addClass("checked");
+						var chances = "#chance" + (i+1);
+						$(chances).removeClass("chance");
+					} else {
+						$(chance[i]).removeClass("checked");
+						var chances = "#chance" + (i+1);
+						$(chances).addClass("chance");
+					}
+				}
+			});
+		</script>
+	</body>
+</html>

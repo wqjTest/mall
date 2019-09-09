@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.atongmu.mall.mall.dao.MallCommodityCommentsDao">
+
+    <select id="listCommodityComments"
+            resultType="com.atongmu.mall.mall.entity.MallCommodityComments">
+        SELECT
+        a.id AS "id",
+        a.crete_date AS "createDate",
+        a.remarks AS "remarks"
+        a.person_name AS "personName",
+        a.person_id AS "personId",
+        a.comment_type AS "commentType",
+        a.anonymous_flag AS "anonymousFlag"
+        FROM
+        mall_commodity_comments a
+        WHERE
+        a.commodity_id = #{commodityId}
+    </select>
+
+    <insert id="save"
+            parameterType="com.atongmu.mall.mall.entity.MallCommodityComments">
+        INSERT INTO mall_commodity_comments(
+        id,
+        create_date,
+        create_by,
+        update_date,
+        update_by,
+        remarks,
+        del_flag,
+        order_id,
+        commodity_id,
+        person_name,
+        person_id,
+        comment_type,
+        anonymous_flag
+        )VALUES (
+        #{id},
+        #{createDate},
+        #{createBy},
+        #{updateDate},
+        #{updateBy},
+        #{remarks},
+        #{delFlag},
+        #{orderId},
+        #{commodityId},
+        #{personName},
+        #{personId},
+        #{commentType},
+        #{anonymousFlag}
+        )
+    </insert>
+
+    <delete id="delete">
+        DELETE FROM
+        mall_commodity_comments
+        WHERE
+        id = #{id}
+    </delete>
+
+</mapper>

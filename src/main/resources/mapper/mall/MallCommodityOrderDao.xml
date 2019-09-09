@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.atongmu.mall.mall.dao.MallCommodityOrderDao">
+
+    <select id="getOrder"
+            resultType="com.atongmu.mall.mall.entity.MallCommodityOrder">
+        SELECT
+	        a.id AS "id",
+	        a.create_date AS "createDate",
+	        a.remarks AS "remarks",
+	        a.order_code AS "orderCode",
+	        a.person_id AS "personId",
+	        a.person_type AS "personType",
+	        a.person_name AS "personName",
+	        a.order_amount AS "orderAmount",
+	        a.pay_status AS "payStatus",
+	        a.pay_time AS "payTime",
+	        a.pay_type AS "payType",
+	        a.pay_flag AS "payFlag",
+	        a.tradeno AS "tradeNo",
+	        a.courier_number AS "courierNumber",
+	        a.receiving_address AS "receivingAddress",
+	        b.phone as "phoneNum",
+	        CONCAT(c.province, c.city, c.district_county, c.address) as "addrDesc"
+        FROM
+        	mall_commodity_order a
+        LEFT JOIN
+        	sys_user b ON a.person_id = b.id
+        LEFT JOIN 
+        	mall_user_address c ON a.receiving_address = c.id
+        WHERE
+        	a.id = #{id}
+    </select>
+
+    <select id="listOrder"
+            parameterType="com.atongmu.mall.mall.entity.MallCommodityOrder"
+            resultType="com.atongmu.mall.mall.entity.MallCommodityOrder">
+        SELECT
+        id AS "id",
+	    create_date AS "createDate",
+	    remarks AS "remarks",
+	    order_code AS "orderCode",
+	    person_id AS "personId",
+	    person_type AS "personType",
+	    person_name AS "personName",
+	    order_amount AS "orderAmount",
+	    pay_status AS "payStatus",
+	    pay_time AS "payTime",
+	    pay_type AS "payType",
+	    pay_flag AS "payFlag"
+        FROM
+        mall_commodity_order
+        WHERE
+        1=1
+        AND person_id = #{personId}
+        AND pay_status = #{payStatus}
+    </select>
+
+    <!-- 改变订单支付方式 -->
+    <update id="updatePayWay"
+            parameterType="com.atongmu.mall.mall.entity.MallCommodityOrder">
+        UPDATE mall_commodity_order SET
+        pay_type = #{payType}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 改变订单状态 -->
+    <update id="savePayStatus"
+            parameterType="com.atongmu.mall.mall.entity.MallCommodityOrder">
+        UPDATE mall_commodity_order SET
+        pay_status = #{payStatus}
+        WHERE id = #{id}
+    </update>
+    
+    <select id="findByUserId"
+            resultType="com.atongmu.mall.mall.entity.MallCommodityOrder">
+        SELECT
+	        id AS "id",
+	        create_date AS "createDate",
+	        remarks AS "remarks",
+	        order_code AS "orderCode",
+	        person_id AS "personId",
+	        person_type AS "personType",
+	        person_name AS "personName",
+	        order_amount AS "orderAmount",
+	        pay_status AS "payStatus",
+	        pay_time AS "payTime",
+	        pay_type AS "payType",
+	        pay_flag AS "payFlag",
+	        tradeno AS "tradeNo",
+	        courier_number AS "courierNumber",
+	        receiving_address AS "receivingAddress"
+        FROM
+        	mall_commodity_order
+        WHERE
+        	person_id = #{userId}
+    </select>
+    
+    <select id="findDetailListByUserId"
+            resultType="com.atongmu.mall.mall.dto.OrderDetailDto">
+        SELECT
+	        a.order_id as orderId,
+	        c.commodity_name as goodsName, 
+	        c.commodity_image as goodsImg,
+	        a.price as price,
+	        a.commodity_num as num,
+	        b.pay_flag as payed,
+	        b.pay_status as status
+        FROM
+        	mall_commodity_order_detail a
+        LEFT JOIN mall_commodity_order b ON a.order_id = b.id
+        LEFT JOIN mall_commodity c ON a.commodity_id = c.id
+        WHERE
+        	b.person_id = #{userId} AND b.del_flag = 0
+        <if test="status!=null and status.length > 0">
+	      	AND b.pay_status IN
+	      	<foreach collection="status" index="index" item="item" open="(" separator="," close=")">
+	      		#{item}
+	      	</foreach>
+	    </if>
+    </select>
+    
+    <select id="findByOrderId"
+            resultType="com.atongmu.mall.mall.dto.OrderDetailDto">
+        SELECT
+	        a.order_id as orderId,
+	        c.commodity_name as goodsName, 
+	        c.commodity_image as goodsImg,
+	        a.price as price,
+	        a.commodity_num as num,
+	        b.pay_flag as payed,
+	        b.pay_status as status
+        FROM
+        	mall_commodity_order_detail a
+        LEFT JOIN mall_commodity_order b ON a.order_id = b.id
+        LEFT JOIN mall_commodity c ON a.commodity_id = c.id
+        WHERE
+        	a.order_id = #{orderId} AND b.del_flag = 0 
+    </select>
+    <update id="delete">
+        UPDATE mall_commodity_order SET
+        del_flag = '1'
+        WHERE id = #{id}
+    </update>
+	<update id="updateStatus">
+        UPDATE mall_commodity_order SET
+        pay_status = #{status}
+        WHERE id = #{orderId}
+    </update>
+
+    <insert id="save"
+            parameterType="com.atongmu.mall.mall.entity.MallCommodityOrder">
+        INSERT INTO mall_commodity_order(
+        id,
+        create_by,
+        create_date,
+        update_by,
+        update_date,
+        remarks,
+        del_flag,
+        order_code,
+        person_id,
+        person_type,
+        person_name,
+        order_amount,
+        pay_status,
+        pay_time,
+        pay_type,
+        pay_flag,
+        tradeno,
+        courier_number,
+        receiving_address
+        ) VALUES (
+        #{id},
+        #{createBy},
+        #{createDate},
+        #{updateBy},
+        #{updateDate},
+        #{remarks},
+        #{delFlag},
+        #{orderCode},
+        #{personId},
+        #{personType},
+        #{personName},
+        #{orderAmount},
+        #{payStatus},
+        #{payTime},
+        #{payType},
+        #{payFlag},
+        #{tradeNo},
+        #{courierNumber},
+        #{receivingAddress}
+        )
+    </insert>
+
+    <update id="update"
+            parameterType="com.atongmu.mall.mall.entity.MallCommodityOrder">
+        UPDATE mall_commodity_order SET
+        update_by = #{updateBy},
+        update_date = #{updateDate},
+        remarks = #{remarks},
+        order_code = #{orderCode},
+        person_id = #{personId},
+        person_type = #{personType},
+        person_name = #{personName},
+        order_amount = #{orderAmount},
+        pay_status = #{payStatus},
+        pay_time = #{payTime},
+        pay_type = #{payType},
+        pay_flag = #{payFlag},
+        tradeno = #{tradeNo},
+        courier_number = #{courierNumber},
+        receiving_address = #{receivingAddress}
+        WHERE id = #{id}
+    </update>
+
+</mapper>

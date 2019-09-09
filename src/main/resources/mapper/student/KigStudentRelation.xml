@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.atongmu.mall.student.dao.KigStudentRelationDao">
+
+    <select id="getRelation"
+            resultType="com.atongmu.mall.student.entity.KigStudentRelation">
+        SELECT
+        student_id AS "studentId",
+        person_name AS "personName",
+        relation AS "relation",
+        photo_1 AS "photo1"
+        FROM
+        kig_student_relation
+        WHERE
+        id = #{id}
+    </select>
+
+</mapper>

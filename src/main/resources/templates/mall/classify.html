@@ -1,0 +1,113 @@
+<!doctype html>
+<html class="no-js" lang="zh-Hans" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
+    <meta name="application-name" content="商城分类">
+    <title>商城分类</title>
+    <link rel="stylesheet" th:href="@{/css/normalize.css}">
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" th:href="@{/css/swiper.css}">
+    <script th:src="@{http://upcdn.b0.upaiyun.com/libs/jquery/jquery-2.0.2.min.js}"></script>
+    <style>
+        header{border-bottom: 1px solid #e6e6e6;}
+        .bottom-space{z-index: 96;}
+    </style>
+</head>
+
+<body>
+<div class="top-space-low"></div>
+<header>
+    <div class="top">
+        <a class="back-btn" href="javascript:void(0)" onClick="javascript :history.back(-1);"></a>
+        <input id="search-input" onclick="window.open('search.html')" type="button" value="提示语...">
+        <a class="right-btn" href="customerService.html"></a>
+    </div>
+</header>
+<section>
+    <div class="menu-item">
+        <a th:each="commodityType,commodityTypeStat:${commodityTypes}"
+           th:text="${commodityType.typeName}"
+           th:name="${commodityType.id}"
+           th:class="${commodityTypeStat.first?'this-item':''}" hidefocus="true">
+        </a>
+    </div>
+    <div class="sort" style="margin-left: 5rem;">
+        <a href="javascript:void(0)" class="this-sort">全部</a>
+        <a id="price-ranking" href="javascript:void(0)">价格
+            <img th:src="@{/img/sort-no.svg}">
+        </a>
+        <a href="javascript:void(0)">销量</a>
+    </div>
+    <div class="swiper-container swiper-container-tab">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <div class="suit-dress">
+                    <!-- 子标题 -->
+                    <span class="real-time"></span>
+                    <div class="classify-shopping">
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-slide">
+                <div style="height: 16.5rem"><div>
+                </div></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="bottom-space"></div>
+    <div class="bottom-bar">
+        <a href="javascript:indexJump(0)" class="home" hidefocus="true"><p>首页</p></a>
+        <a href="classify.html" class="classify this-classify this-page" hidefocus="true"><p>分类</p></a>
+        <!--<a href="integral.html" class="gold" hidefocus="true"><p>积分专区</p></a>-->
+        <a href="javascript:indexJump(3)" class="shopping" hidefocus="true"><p>购物车</p></a>
+        <a href="javascript:indexJump(4)" class="my" hidefocus="true"><p>我的</p></a>
+    </div>
+</footer>
+
+<script th:src="@{/js/swiper.js}"></script>
+<script th:src="@{/js/classify.js}"></script>
+<script>
+    var numFoot=$('.bottom-bar').find("a").length;
+    if(numFoot==1){$('.bottom-bar').find("a").css({"width":"100%"});}
+    else if( numFoot==2){$('.bottom-bar').find("a").css({"width":"50%"});}
+    else if( numFoot==3){$('.bottom-bar').find("a").css({"width":"33.3%"});}
+    else if( numFoot==4){$('.bottom-bar').find("a").css({"width":"25%"});}
+    else if( numFoot==5){$('.bottom-bar').find("a").css({"width":"20%"});}
+
+    $(document).ready(function (){
+        // 找到menu-item下的第一个a标签 取出ID和NAME
+        var firstType = $(".menu-item a").first();
+        var commodityTypeId = firstType.attr("name");
+        var typeName = firstType.text();
+        fillCommodityData(commodityTypeId, typeName);
+    });
+    function indexJump(number) {
+        var userId = localStorage.getItem("userId");
+        switch (number){
+            case 0:
+                window.location.href = "/mall/home/index?userId=" + userId;//index.html
+                break;
+            case 1:
+                window.location.href = "#";//classify.html
+                break;
+            case 2:
+                window.location.href = "" + userId;//integral.html
+                break;
+            case 3:
+                window.location.href = "/mall/mallCar/viewMallCar/" + userId;//shopping.html
+                break;
+            case 4:
+                window.location.href = "/mall/h5/my.html";
+                break;
+            default:
+                window.location.href = "#";
+                break;
+        }
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.atongmu.mall.mall.dao.MallCommodityImageDao">
+
+    <select id="listCommodityImg"
+            resultType="com.atongmu.mall.mall.entity.MallCommodityImage">
+        SELECT
+        a.commodity_id AS "commodityId",
+		a.image_url AS "imageUrl"
+        FROM
+        mall_commodity_image a
+        WHERE
+        a.commodity_id = #{commodityId}
+    </select>
+
+</mapper>
